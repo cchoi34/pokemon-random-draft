@@ -6,9 +6,9 @@ type ButtonProps = {
   text: string,
 }
 
-function Button({text}: ButtonProps) {
+function Button({ text }: ButtonProps) {
   return (
-    <button type="button" className="button">
+    <button type="button" className="button text-nav">
       {text}
     </button>
   );

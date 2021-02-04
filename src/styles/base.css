@@ -1,7 +1,16 @@
 html {
   /* color constants */
+  --white: #ffffff;
+  --black: #000000;
   --dark-grey: #404040;
   --light-grey: #adadad;
+  --bright-pink: #ff1fa9;
+  --bright-cyan: #00e6f2;
+
+  /* shadows */
+  --button-shadow: 0.2rem 0.4rem 0.4rem rgba(0, 0, 0, 0.3);
+  --button-shadow-hover: 0.2rem 0.4rem 0.6rem rgba(0, 0, 0, 0.25);
+  --button-shadow-click: 0.1rem 0.1rem 0.2rem rgba(0, 0, 0, 0.425);
 }
 
 body {
