@@ -31,7 +31,9 @@
             "jsx": "never",
             "mjs": "never"
         }],
-        "react/jsx-one-expression-per-line": ["<enabled>", { "allow": "single-child"}]
+        "react/jsx-one-expression-per-line": [0, { "allow": "single-child"}],
+        "eol-last": "off",
+        "react/destructuring-assignment": "off"
     },
     "settings": {
         "import/resolver": {

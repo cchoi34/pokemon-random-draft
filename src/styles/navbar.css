@@ -1,0 +1,20 @@
+.navbar-container {
+  background-color: cyan;
+}
+
+.navbar-container ul {
+  display: flex;
+  justify-content: space-between;
+  list-style-type: none;
+  padding: 0.5rem 2.4rem;
+}
+
+.navbar-container a {
+  color: var(--dark-grey);
+  text-decoration: none;
+}
+
+.navbar-container a:hover {
+  color: var(--light-grey);
+  transition: all 0.3s;
+}
