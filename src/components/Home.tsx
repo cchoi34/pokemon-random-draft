@@ -1,47 +1,91 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import db from '../firebase/firestore';
 import RuleCard from './basic-elements/RuleCard';
+import { RuleCardData } from '../utils/dataTypes';
+import * as componentUtils from '../utils/componentUtils';
 import '../styles/home.css';
 
 function Home() {
-  const [cardInfo] = useState([
+  const [cardInfoOne, setCardInfoOne] = useState<RuleCardData>(
+    {
+      title: 'Draft your team',
+      description: 'Start',
+      color: 'green',
+    },
+  );
+  const [cardInfoTwo, setCardInfoTwo] = useState<RuleCardData>(
     {
       title: 'Draft your team',
       description: 'Start by drafting your Pokemon team from a selection of random Pokemon, moves and abilities. The draft will commence in a round-based manner, where 3 unique Pokemon will be shown, each with a random ability and 4 random moves (not limited to the Pokemon). Choose your favorite out of the three!',
       color: 'green',
     },
+  );
+  const [cardInfoThree, setCardInfoThree] = useState<RuleCardData>(
     {
-      title: 'Build your team',
-      description: 'Once you have gone through 10 rounds of drafting, you now have 10 potential candidates for your 6 slot Pokemon team. Out of the 40 moves and 10 random abilities, assemble the best team you can think of. Abilities and moves are not limited to the Pokemon they came with; you can mix and match them as you please!',
-      color: 'orange',
+      title: 'Draft your team',
+      description: 'Start by drafting your Pokemon team from a selection of random Pokemon, moves and abilities. The draft will commence in a round-based manner, where 3 unique Pokemon will be shown, each with a random ability and 4 random moves (not limited to the Pokemon). Choose your favorite out of the three!',
+      color: 'green',
     },
-    {
-      title: 'Export your team',
-      description: 'Once you have settled on 6 Pokemon each with an ability and 4 unique moves, you can then export your team. This allows you to import it into Pokemon Showdown and you can now play against your friends. See who drafted the best team!',
-      color: 'blue',
-    },
-  ]);
+  );
+
+  useEffect(() => {
+    async function getRuleData() {
+      const ruleCardOne = await db.collection('rules').doc('1').get();
+      const ruleCardTwo = await db.collection('rules').doc('2').get();
+      const ruleCardThree = await db.collection('rules').doc('3').get();
+      const ruleCardOneData = ruleCardOne.data();
+      const ruleCardTwoData = ruleCardTwo.data();
+      const ruleCardThreeData = ruleCardThree.data();
+      if (ruleCardOneData) {
+        const data = componentUtils.modifyDataForHomeState(
+          ruleCardOneData.title,
+          ruleCardOneData.description,
+          ruleCardOneData.color,
+        );
+        setCardInfoOne(data);
+      }
+      if (ruleCardTwoData) {
+        const data = componentUtils.modifyDataForHomeState(
+          ruleCardTwoData.title,
+          ruleCardTwoData.description,
+          ruleCardTwoData.color,
+        );
+        setCardInfoTwo(data);
+      }
+      if (ruleCardThreeData) {
+        const data = componentUtils.modifyDataForHomeState(
+          ruleCardThreeData.title,
+          ruleCardThreeData.description,
+          ruleCardThreeData.color,
+        );
+        setCardInfoThree(data);
+      }
+    }
+
+    getRuleData();
+  });
 
   return (
     <div className="home-container">
       <section className="home-section">
         <RuleCard
-          title={cardInfo[0].title}
-          description={cardInfo[0].description}
-          color={cardInfo[0].color}
+          title={cardInfoOne.title}
+          description={cardInfoOne.description}
+          color={cardInfoOne.color}
         />
       </section>
       <section className="home-section home-mirrored">
         <RuleCard
-          title={cardInfo[1].title}
-          description={cardInfo[1].description}
-          color={cardInfo[1].color}
+          title={cardInfoTwo.title}
+          description={cardInfoTwo.description}
+          color={cardInfoTwo.color}
         />
       </section>
       <section className="home-section">
         <RuleCard
-          title={cardInfo[2].title}
-          description={cardInfo[2].description}
-          color={cardInfo[2].color}
+          title={cardInfoThree.title}
+          description={cardInfoThree.description}
+          color={cardInfoThree.color}
         />
       </section>
     </div>

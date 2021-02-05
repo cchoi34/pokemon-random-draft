@@ -33,7 +33,9 @@
         }],
         "react/jsx-one-expression-per-line": [0, { "allow": "single-child"}],
         "eol-last": "off",
-        "react/destructuring-assignment": "off"
+        "react/destructuring-assignment": "off",
+        "no-unused-vars": "off",
+        "import/prefer-default-export": "off"
     },
     "settings": {
         "import/resolver": {
