@@ -1,0 +1,34 @@
+.rule-card-container {
+  border-radius: 2rem;
+  box-shadow: var(--card-shadow);
+  width: 60rem;
+  height: 15rem;
+  margin: 0 3rem;
+  padding: 1rem 3rem;
+  color: var(--dark-grey);
+}
+
+/* colors */
+.rule-card-blue {
+  background-image: linear-gradient(
+    135deg,
+    var(--rd-blue),
+    var(--rd-lighter-blue)
+  );
+}
+
+.rule-card-green {
+  background-image: linear-gradient(
+    135deg,
+    var(--rd-green),
+    var(--rd-lighter-green)
+  );
+}
+
+.rule-card-orange {
+  background-image: linear-gradient(
+    135deg,
+    var(--rd-orange),
+    var(--rd-lighter-orange)
+  );
+}
