@@ -1,0 +1,72 @@
+.sign-in-container {
+  display: flex;
+  justify-content: center;
+  color: var(--dark-grey);
+}
+
+.sign-in-card {
+  border-radius: 5rem;
+  background-image: linear-gradient(
+    135deg,
+    var(--rd-green),
+    var(--rd-lighter-green)
+  );
+  margin-top: 5rem;
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  width: 30rem;
+}
+
+.sign-in-card > div,
+.sign-in-card > h2 {
+  width: 30rem;
+}
+
+.sign-in-form-elements {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin: 1rem 2rem;
+}
+
+.sign-in-form-elements input {
+  width: 25rem;
+  font-size: 1.4rem;
+  border-radius: 2rem;
+  border-style: none;
+  border: 0.15rem solid transparent;
+  margin-top: 0.8rem;
+  padding: 0.2rem 0.6rem;
+  cursor: pointer;
+}
+
+.sign-in-form-elements input:hover {
+  border: 0.15rem solid var(--bright-cyan);
+  transition: 0.3s all;
+}
+
+.sign-in-form-elements input:focus {
+  outline: none;
+  box-shadow: var(--focus-shadow);
+  transition: 0.3s all;
+}
+
+.sign-in-create-account {
+  margin: 1rem 0;
+}
+
+.sign-in-create-account a {
+  text-decoration: none;
+  color: var(--bright-cyan);
+}
+
+.sign-in-create-account a:hover {
+  color: var(--white);
+  transition: 0.3s all;
+}
+
+.sign-in-create-account p {
+  margin: 0;
+}
