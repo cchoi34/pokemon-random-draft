@@ -36,7 +36,10 @@
         "react/destructuring-assignment": "off",
         "no-unused-vars": "off",
         "import/prefer-default-export": "off",
-        "jsx-a11y/label-has-associated-control": "off"
+        "jsx-a11y/label-has-associated-control": "off",
+        "react/require-default-props": "off",
+        "no-shadow": "off",
+        "react/jsx-closing-bracket-location": "off"
     },
     "settings": {
         "import/resolver": {

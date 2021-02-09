@@ -9,14 +9,15 @@ function SignIn() {
     <div className="sign-in-container text-subheader">
       <div className="sign-in-card">
         <h2>Sign in</h2>
-        <div className="sign-in-form-elements">
+        <div className="sign-in-form-elements text-eyebrow">
           <label htmlFor="username">Username</label>
           <input type="text" name="username" id="username" />
         </div>
-        <div className="sign-in-form-elements">
+        <div className="sign-in-form-elements text-eyebrow">
           <label htmlFor="password">Password</label>
           <input type="text" name="password" id="password" />
         </div>
+        <Button text="Sign in" />
         <div className="sign-in-create-account text-paragraph">
           <p>Don&#39;t have an account?</p>
           <Link to="/sign-in">Create account</Link>

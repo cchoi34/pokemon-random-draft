@@ -2,13 +2,25 @@ import React from 'react';
 import '../../styles/button.css';
 import '../../styles/text.css';
 
-type ButtonProps = {
-  text: string,
+enum ButtonWidthOptions {
+  SMALL = 'small',
+  MEDIUM = 'medium',
+  LARGE = 'large',
 }
 
-function Button({ text }: ButtonProps) {
+type ButtonProps = {
+  text: string,
+  width: ButtonWidthOptions,
+  onClick?: () => void,
+}
+
+function Button({ text, width, onClick }: ButtonProps) {
   return (
-    <button type="button" className="button text-nav">
+    <button
+      type="button"
+      className="button text-nav"
+      onClick={onClick} 
+    >
       {text}
     </button>
   );
