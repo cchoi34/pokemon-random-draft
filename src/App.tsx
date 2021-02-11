@@ -9,7 +9,6 @@ import Navbar from './components/Navbar';
 
 function App() {
   const [userToken, setUserToken] = useState(userAuthUtils.getUserAuthToken());
-  console.log('userToken: ', userToken);
   return (
     <div className="App">
       <Router>

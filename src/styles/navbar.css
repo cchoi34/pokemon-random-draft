@@ -1,11 +1,19 @@
 .navbar-container {
+  background-color: transparent;
+  height: 4rem;
 }
 
 .navbar-container ul {
-  display: flex;
-  justify-content: space-between;
   list-style-type: none;
-  padding: 0.5rem 2.4rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 4rem;
+}
+
+.navbar-container li {
+  width: 10rem;
 }
 
 .navbar-container a {
@@ -16,4 +24,23 @@
 .navbar-container a:hover {
   color: var(--light-grey);
   transition: all 0.3s;
+}
+
+.navbar-home {
+  position: absolute;
+  top: 0.6rem;
+  left: 4rem;
+}
+
+.navbar-start {
+  position: absolute;
+  top: 0.6rem;
+  left: calc(50% - 100px);
+  width: 10rem;
+}
+
+.navbar-user {
+  position: absolute;
+  top: 0.6rem;
+  right: 4rem;
 }

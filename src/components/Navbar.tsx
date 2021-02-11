@@ -10,15 +10,15 @@ function Navbar() {
   return (
     <div className="navbar-container text-nav">
       <ul>
-        <li>
+        <li className="navbar-home">
           <Link to="/">Home</Link>
         </li>
-        <li>
+        <li className="navbar-start">
           <Link to="/random-draft">
             <Button text="Start" />
           </Link>
         </li>
-        <li>
+        <li className="navbar-user">
           {
             isUserSignedIn
               ? <Link to="/sign-in">{userAuthUtils.getUserAuthUsername()}</Link>
