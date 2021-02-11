@@ -1,5 +1,5 @@
 import React from 'react';
-import db from '../firebase/firestore';
+import { db } from '../firebase/firestore';
 import * as componentUtils from './componentUtils';
 import { RuleCardData, AllRuleCardData } from './dataTypes';
 

@@ -6,6 +6,7 @@ import Home from './components/Home';
 import SignIn from './components/SignIn';
 import CreateAccount from './components/CreateAccount';
 import Navbar from './components/Navbar';
+import StartSequenceDraftPresets from './components/StartSequenceDraftPresets';
 
 function App() {
   const [userToken, setUserToken] = useState(userAuthUtils.getUserAuthToken());
@@ -16,6 +17,7 @@ function App() {
         <Route exact path="/" component={Home} />
         <Route exact path="/sign-in" component={SignIn} />
         <Route exact path="/create-account" component={CreateAccount} />
+        <Route exact path="/start-sequence" component={StartSequenceDraftPresets} />
       </Router>
     </div>
   );

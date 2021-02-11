@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import db from '../firebase/firestore';
+import { db } from '../firebase/firestore';
 import * as userAuthUtils from '../utils/userAuthUtils';
 import Button from './basic-elements/Button';
 import '../styles/sign-in.css';

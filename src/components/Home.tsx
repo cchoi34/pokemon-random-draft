@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import db from '../firebase/firestore';
+import { db } from '../firebase/firestore';
 import RuleCard from './basic-elements/RuleCard';
 import { RuleCardData } from '../utils/dataTypes';
 import * as componentUtils from '../utils/componentUtils';

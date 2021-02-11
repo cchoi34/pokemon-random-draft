@@ -14,7 +14,7 @@ function Navbar() {
           <Link to="/">Home</Link>
         </li>
         <li className="navbar-start">
-          <Link to="/random-draft">
+          <Link to="/start-sequence">
             <Button text="Start" />
           </Link>
         </li>
