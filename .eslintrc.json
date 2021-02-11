@@ -39,7 +39,9 @@
         "jsx-a11y/label-has-associated-control": "off",
         "react/require-default-props": "off",
         "no-shadow": "off",
-        "react/jsx-closing-bracket-location": "off"
+        "react/jsx-closing-bracket-location": "off",
+        "no-trailing-spaces": "off",
+        "no-restricted-globals": "off"
     },
     "settings": {
         "import/resolver": {

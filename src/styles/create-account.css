@@ -1,15 +1,15 @@
-.sign-in-container {
+.create-account-container {
   display: flex;
   justify-content: center;
   color: var(--dark-grey);
 }
 
-.sign-in-card {
+.create-account-card {
   border-radius: 5rem;
   background-image: linear-gradient(
     135deg,
-    var(--rd-green),
-    var(--rd-lighter-green)
+    var(--rd-blue),
+    var(--rd-lighter-blue)
   );
   margin-top: 5rem;
   padding: 1.6rem;
@@ -19,19 +19,19 @@
   width: 30rem;
 }
 
-.sign-in-card > .form-elements,
-.sign-in-card > h2 {
+.create-account-card > .form-elements,
+.create-account-card > h2 {
   width: 30rem;
 }
 
-.sign-in-form-elements {
+.create-account-form-elements {
   display: flex;
   flex-direction: column;
   text-align: left;
   margin: 1rem 2rem;
 }
 
-.sign-in-form-elements input {
+.create-account-form-elements input {
   width: 25rem;
   font-size: 1.4rem;
   border-radius: 2rem;
@@ -42,36 +42,41 @@
   cursor: pointer;
 }
 
-.sign-in-form-elements input:hover {
+.create-account-form-elements input:hover {
   border: 0.15rem solid var(--bright-cyan);
   transition: 0.3s all;
 }
 
-.sign-in-form-elements input:focus {
+.create-account-form-elements input:focus {
   outline: none;
   box-shadow: var(--focus-shadow);
   transition: 0.3s all;
 }
 
-.sign-in-button {
+.create-account-button {
   margin: 2rem auto;
   width: auto;
 }
 
-.sign-in-create-account {
+.create-account-sign-in {
   margin: 1rem 0;
 }
 
-.sign-in-create-account a {
+.create-account-sign-in a {
   text-decoration: none;
-  color: var(--bright-cyan);
+  color: var(--bright-pink);
 }
 
-.sign-in-create-account a:hover {
+.create-account-sign-in a:hover {
   color: var(--white);
   transition: 0.3s all;
 }
 
-.sign-in-create-account p {
+.create-account-sign-in p {
   margin: 0;
+}
+
+.create-account-error-message {
+  color: var(--rd-orange);
+  font-size: 1rem;
 }

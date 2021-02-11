@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import * as userAuthUtils from '../utils/userAuthUtils';
 import Button from './basic-elements/Button';
 import '../styles/navbar.css';
 import '../styles/text.css';
 
 function Navbar() {
+  const [isUserSignedIn, setIsUserSignedIn] = useState(userAuthUtils.isUserSignedIn());
   return (
     <div className="navbar-container text-nav">
       <ul>
@@ -17,7 +19,11 @@ function Navbar() {
           </Link>
         </li>
         <li>
-          <Link to="/sign-in">Sign in</Link>
+          {
+            isUserSignedIn
+              ? <Link to="/sign-in">{userAuthUtils.getUserAuthUsername()}</Link>
+              : <Link to="/sign-in">Sign in</Link>
+          }
         </li>
       </ul>
     </div>
