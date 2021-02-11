@@ -1,15 +1,17 @@
 .navbar-container {
-  background-color: transparent;
+  background-color: var(--white);
   height: 4rem;
+  position: relative;
 }
 
 .navbar-container ul {
   list-style-type: none;
   position: fixed;
-  top: 0;
+  top: -2rem;
   left: 0;
   width: 100vw;
-  height: 4rem;
+  background-color: var(--white);
+  height: 6rem;
 }
 
 .navbar-container li {
@@ -28,19 +30,19 @@
 
 .navbar-home {
   position: absolute;
-  top: 0.6rem;
+  top: 1.2rem;
   left: 4rem;
 }
 
 .navbar-start {
   position: absolute;
-  top: 0.6rem;
+  top: 1.2rem;
   left: calc(50% - 100px);
   width: 10rem;
 }
 
 .navbar-user {
   position: absolute;
-  top: 0.6rem;
+  top: 1.2rem;
   right: 4rem;
 }
