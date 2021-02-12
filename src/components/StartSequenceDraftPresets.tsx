@@ -67,7 +67,7 @@ function StartSequenceDraftPresets() {
           currentDraftStarted: true,
           currentDraftItems: [],
         });
-        setRedirect('/start-sequence/pick-pokemon');
+        setRedirect('/start-sequence/select-a-pokemon');
       } else {
         console.log('please sign in before starting a draft!');
         setIsUserSignedIn(false);

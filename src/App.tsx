@@ -7,6 +7,7 @@ import SignIn from './components/SignIn';
 import CreateAccount from './components/CreateAccount';
 import Navbar from './components/Navbar';
 import StartSequenceDraftPresets from './components/StartSequenceDraftPresets';
+import StartSequenceSelectAPokemon from './components/StartSequenceSelectAPokemon';
 
 function App() {
   const [userToken, setUserToken] = useState(userAuthUtils.getUserAuthToken());
@@ -18,6 +19,7 @@ function App() {
         <Route exact path="/sign-in" component={SignIn} />
         <Route exact path="/create-account" component={CreateAccount} />
         <Route exact path="/start-sequence" component={StartSequenceDraftPresets} />
+        <Route exact path="/start-sequence/select-a-pokemon" component={StartSequenceSelectAPokemon} />
       </Router>
     </div>
   );

@@ -1,0 +1,9 @@
+.progress-bar-container {
+  text-align: center;
+}
+
+.progress-bar {
+  width: 15rem;
+  color: blueviolet;
+  border-radius: 3rem;
+}
