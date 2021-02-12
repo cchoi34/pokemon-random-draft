@@ -41,7 +41,8 @@
         "no-shadow": "off",
         "react/jsx-closing-bracket-location": "off",
         "no-trailing-spaces": "off",
-        "no-restricted-globals": "off"
+        "no-restricted-globals": "off",
+        "react/jsx-boolean-value": "off"
     },
     "settings": {
         "import/resolver": {

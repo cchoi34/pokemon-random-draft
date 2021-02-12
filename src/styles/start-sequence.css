@@ -57,3 +57,8 @@
   margin: 2rem auto;
   width: auto;
 }
+
+.error-message {
+  color: var(--rd-orange);
+  font-size: 1rem;
+}

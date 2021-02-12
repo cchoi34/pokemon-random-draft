@@ -11,3 +11,7 @@ export function modifyDataForHomeState(
     color,
   };
 }
+
+export function generateFormErrorMessage(message: string) {
+  return <p className="error-message">{message}</p>;
+}
