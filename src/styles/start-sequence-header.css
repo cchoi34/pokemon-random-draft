@@ -2,3 +2,12 @@
   text-align: center;
   color: var(--dark-grey);
 }
+
+.start-sequence-header {
+  margin-bottom: 0rem;
+}
+
+.start-sequence-subheader {
+  margin-top: 0rem;
+  font-size: 1.2rem;
+}

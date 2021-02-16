@@ -1,0 +1,8 @@
+.start-sequence-banner-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.start-sequence-banner-container > div {
+  width: 30rem;
+}

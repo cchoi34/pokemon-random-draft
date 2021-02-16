@@ -1,3 +1,8 @@
 .preset-banner-container {
   color: var(--dark-grey);
 }
+
+.preset-banner-container p {
+  font-size: 0.8rem;
+  margin: 3rem;
+}

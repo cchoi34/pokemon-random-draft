@@ -4,14 +4,16 @@ import '../../styles/text.css';
 
 type StartSequenceHeaderProps = {
   header: string,
-  subheader: string,
+  subheader: string | null,
 }
 
 function StartSequenceHeader({ header, subheader }: StartSequenceHeaderProps) {
   return (
     <div className="start-sequence-header-container">
       <h2 className="start-sequence-header">{header}</h2>
-      <p className="start-sequence-subheader">{subheader}</p>
+      {
+        subheader && <p className="start-sequence-subheader">{subheader}</p>
+      }
     </div>
   );
 }

@@ -1,9 +1,12 @@
 .progress-bar-container {
+  font-size: 1.2rem;
+  margin: 1rem 6rem;
   text-align: center;
 }
 
 .progress-bar {
-  width: 15rem;
-  color: blueviolet;
+  width: 20rem;
+  background-color: blueviolet;
   border-radius: 3rem;
+  margin: 0 auto;
 }

@@ -1,0 +1,29 @@
+.pokemon-draft-card-container {
+  width: 15rem;
+  border-radius: 2rem;
+  height: 20rem;
+}
+
+.pokemon-draft-card-orange {
+  background-image: linear-gradient(
+    135deg,
+    var(--rd-orange),
+    var(--rd-lighter-orange)
+  );
+}
+
+.pokemon-draft-card-blue {
+  background-image: linear-gradient(
+    135deg,
+    var(--rd-blue),
+    var(--rd-lighter-blue)
+  );
+}
+
+.pokemon-draft-card-green {
+  background-image: linear-gradient(
+    135deg,
+    var(--rd-green),
+    var(--rd-lighter-green)
+  );
+}
