@@ -1,0 +1,81 @@
+.pokemon-type {
+  color: var(--white);
+  font-weight: 700;
+  -webkit-text-stroke: 0.05rem var(--black);
+  width: 5rem;
+  padding: 0.2rem;
+  border-radius: 0.4rem;
+  border: 0.1rem solid var(--dark-grey);
+}
+
+.normal {
+  background-color: var(--normal);
+}
+
+.fighting {
+  background-color: var(--fighting);
+}
+
+.flying {
+  background-color: var(--flying);
+}
+
+.bug {
+  background-color: var(--bug);
+}
+
+.grass {
+  background-color: var(--grass);
+}
+
+.fire {
+  background-color: var(--fire);
+}
+
+.water {
+  background-color: var(--water);
+}
+
+.ground {
+  background-color: var(--ground);
+}
+
+.rock {
+  background-color: var(--rock);
+}
+
+.steel {
+  background-color: var(--steel);
+}
+
+.ghost {
+  background-color: var(--ghost);
+}
+
+.psychic {
+  background-color: var(--psychic);
+}
+
+.dark {
+  background-color: var(--dark);
+}
+
+.ice {
+  background-color: var(--ice);
+}
+
+.dragon {
+  background-color: var(--dragon);
+}
+
+.fairy {
+  background-color: var(--fairy);
+}
+
+.electric {
+  background-color: var(--electric);
+}
+
+.poison {
+  background-color: var(--poison);
+}

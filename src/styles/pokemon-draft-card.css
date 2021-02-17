@@ -1,7 +1,49 @@
 .pokemon-draft-card-container {
-  width: 15rem;
+  width: 22rem;
   border-radius: 2rem;
-  height: 20rem;
+  height: 30rem;
+}
+
+.pokemon-draft-card-container p {
+  margin: 0;
+}
+
+.pokemon-draft-card-banner {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 1rem 0.5rem;
+}
+
+.pokemon-draft-card-image img {
+  width: 6rem;
+  height: auto;
+}
+
+.pokemon-draft-card-moves-container {
+  font-size: 1.2rem;
+  width: 20rem;
+  background-color: var(--white);
+  border-radius: 1rem;
+  padding: 1rem 0.2rem;
+  margin: 1rem auto;
+  text-align: center;
+}
+
+.pokemon-draft-card-move {
+  display: flex;
+  justify-content: space-around;
+  margin: 0.6rem 0.2rem;
+}
+
+.pokemon-draft-card-ability-container {
+  font-size: 1.2rem;
+  width: 20rem;
+  background-color: var(--white);
+  border-radius: 1rem;
+  padding: 1rem 0.2rem;
+  margin: 1rem auto;
+  text-align: center;
 }
 
 .pokemon-draft-card-orange {

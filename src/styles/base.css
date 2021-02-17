@@ -17,6 +17,26 @@ html {
   --rd-blue: #06f0ff;
   --rd-lighter-blue: #dbfffd;
 
+  /* pokemon type color constants */
+  --normal: #787878;
+  --fighting: #871c01;
+  --flying: #c4fffc;
+  --bug: #a5c769;
+  --grass: #12b518;
+  --fire: #ff4314;
+  --water: #09b3d9;
+  --ground: #b08f53;
+  --rock: #8c5d07;
+  --steel: #575757;
+  --ghost: #3541b5;
+  --psychic: #d914cc;
+  --dark: #302b3b;
+  --ice: #3defff;
+  --dragon: #5d2fde;
+  --fairy: #ffb3f4;
+  --electric: #f1f525;
+  --poison: #a922e3;
+
   /* shadows */
   --button-shadow: 0.2rem 0.4rem 0.4rem rgba(0, 0, 0, 0.3);
   --button-shadow-hover: 0.2rem 0.4rem 0.6rem rgba(0, 0, 0, 0.25);
