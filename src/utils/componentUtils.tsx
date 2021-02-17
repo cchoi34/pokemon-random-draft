@@ -15,3 +15,9 @@ export function modifyDataForHomeState(
 export function generateFormErrorMessage(message: string) {
   return <p className="error-message">{message}</p>;
 }
+
+export function capitalizeFirstLetter(text: string) {
+  const first = text.substr(0, 1);
+  const others = text.substr(1);
+  return first.toUpperCase().concat(others);
+}

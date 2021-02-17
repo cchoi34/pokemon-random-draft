@@ -2,8 +2,9 @@
   color: var(--white);
   font-weight: 700;
   -webkit-text-stroke: 0.05rem var(--black);
-  width: 5rem;
+  min-width: 5rem;
   padding: 0.2rem;
+  text-align: center;
   border-radius: 0.4rem;
   border: 0.1rem solid var(--dark-grey);
 }

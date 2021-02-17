@@ -11,17 +11,22 @@ function PokemonSprite({ pokemonName }: PokemonSpriteProps) {
 
   function getImage(path: string) {
     async function getImageFromStorage() {
-      const storageRef = storage.ref();
-      const imageRef = storageRef.child(path);
-      const url = await imageRef.getDownloadURL();
-      setImageSrc(url);
-      setImageAlt(pokemonName);
+      try {
+        const storageRef = storage.ref();
+        const imageRef = storageRef.child(path);
+        const url = await imageRef.getDownloadURL();
+        setImageSrc(url);
+        setImageAlt(pokemonName);
+      } catch (e) {
+        console.log(e);
+      }
     }
     getImageFromStorage();
   }
 
   function getPath() {
-    return `pokemon-gen-3/${pokemonName}.png`;
+    const lowerCasePokemon = pokemonName.toLowerCase();
+    return `pokemon-gen-3/${lowerCasePokemon}.png`;
   }
 
   useEffect(() => {

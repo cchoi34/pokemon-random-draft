@@ -1,7 +1,9 @@
 .pokemon-draft-card-container {
   width: 22rem;
   border-radius: 2rem;
-  height: 30rem;
+  height: 34rem;
+  color: var(--dark-grey);
+  font-size: 1.6rem;
 }
 
 .pokemon-draft-card-container p {
@@ -13,6 +15,11 @@
   justify-content: space-around;
   align-items: center;
   margin: 1rem 0.5rem;
+}
+
+.pokemon-type-container div {
+  font-size: 1.2rem;
+  margin-bottom: 0.2rem;
 }
 
 .pokemon-draft-card-image img {
@@ -32,8 +39,9 @@
 
 .pokemon-draft-card-move {
   display: flex;
-  justify-content: space-around;
-  margin: 0.6rem 0.2rem;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.6rem 1.2rem;
 }
 
 .pokemon-draft-card-ability-container {
@@ -44,6 +52,26 @@
   padding: 1rem 0.2rem;
   margin: 1rem auto;
   text-align: center;
+}
+
+.pokemon-name {
+  font-weight: 700;
+  padding: 0 0.4rem;
+}
+
+.moves-title,
+.ability-title {
+  font-weight: 700;
+  padding-bottom: 0.4rem;
+}
+
+.ability-name {
+  text-decoration: underline;
+  padding-bottom: 0.2rem;
+}
+
+.ability-description {
+  font-size: 1rem;
 }
 
 .pokemon-draft-card-orange {

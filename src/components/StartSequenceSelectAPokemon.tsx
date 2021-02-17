@@ -75,7 +75,7 @@ function StartSequenceSelectAPokemon() {
       );
     }
     if (item === SelectionItem.POKEMON) {
-      const moveIDs = [1, 2, 1, 2];
+      const moveIDs = [1, 2, 3, 4];
       return (
         <PokemonDraftCard 
           pokemonID={1} 

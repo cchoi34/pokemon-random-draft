@@ -28,6 +28,16 @@ export type PokemonDraftCardData = {
   color: string,
 }
 
+export type PokemonMovesType = {
+  name: string,
+  type: PokemonTypes,
+}
+
+export type PokemonAbilityType = {
+  name: string,
+  description: string,
+}
+
 export enum PokemonTypes {
   NORMAL = 'normal',
   FIGHTING = 'fighting',
