@@ -2,7 +2,7 @@ import React from 'react';
 import StartSequenceHeader from './StartSequenceHeader';
 import PresetBanner from './PresetBanner';
 import YourPokemonDraftProgressBar from './YourPokemonDraftProgressBar';
-import { PresetBannerData, YourPokemonDraftProgressBarData } from '../../utils/dataTypes';
+import { PresetBannerData, SelectedPokemonData, YourPokemonDraftProgressBarData } from '../../utils/dataTypes';
 import '../../styles/start-sequence-banner.css';
 import '../../styles/text.css';
 
@@ -10,14 +10,14 @@ type StartSequenceBannerProps = {
   header: string,
   subheader: string | null,
   presets: PresetBannerData,
-  draftProgressBar: YourPokemonDraftProgressBarData | null,
+  progressBar: YourPokemonDraftProgressBarData | null,
 }
 
 function StartSequenceBanner({ 
   header, 
   subheader, 
   presets, 
-  draftProgressBar, 
+  progressBar, 
 }: StartSequenceBannerProps) {
   function getHeader() {
     return (
@@ -41,11 +41,11 @@ function StartSequenceBanner({
   }
 
   function getDraftProgressBar() {
-    if (draftProgressBar) {
+    if (progressBar) {
       return (
         <div className="start-sequence-draft-progress-bar">
           <YourPokemonDraftProgressBar 
-            pokemonDraftedImages={draftProgressBar.pokemonDraftedImages} 
+            allSelectedPokemon={progressBar.allSelectedPokemon} 
           />
         </div>
       );

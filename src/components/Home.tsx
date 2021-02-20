@@ -63,7 +63,7 @@ function Home() {
     }
 
     getRuleData();
-  });
+  }, []);
 
   return (
     <div className="home-container">

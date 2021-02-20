@@ -1,6 +1,7 @@
 html {
   padding: 0;
   margin: 0;
+  height: auto;
   /* color constants */
   --white: #ffffff;
   --black: #000000;

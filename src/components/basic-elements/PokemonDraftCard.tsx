@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { db, storage } from '../../firebase/firestore';
 import PokemonSprite from './PokemonSprite';
 import PokemonType from './PokemonType';
+import Button from './Button';
 import { 
   PokemonDraftCardData, 
   PokemonTypes, 
   PokemonMovesType, 
-  PokemonAbilityType, 
+  PokemonAbilityType,
+  SelectedPokemonData, 
 } from '../../utils/dataTypes';
 import { capitalizeFirstLetter } from '../../utils/componentUtils';
 import '../../styles/pokemon-draft-card.css';
@@ -18,6 +20,7 @@ function PokemonDraftCard(
     moveIDs,
     abilityID,
     color,
+    onClick,
   }: PokemonDraftCardData,
 ) {
   const [pokemon, setPokemon] = useState<string>('');
@@ -36,7 +39,7 @@ function PokemonDraftCard(
       if (!maybePokemon.empty) {
         maybePokemon.forEach((pokemonDoc) => {
           const data = pokemonDoc.data();
-          setPokemon(capitalizeFirstLetter(data.name));
+          setPokemon(data.name);
           setTypes(data.types);
         });
       }
@@ -92,12 +95,31 @@ function PokemonDraftCard(
     getAbilityFromFirestore();
   }
 
+  function createSelectedPokemon() {
+    if (moveOne && moveTwo && moveThree && moveFour && ability && pokemon) {
+      return {
+        pokemonID,
+        pokemonName: pokemon,
+        abilityID,
+        abilityName: ability,
+        moveIDs,
+        moves: [
+          moveOne?.name,
+          moveTwo?.name,
+          moveThree?.name,
+          moveFour?.name,
+        ],
+      };
+    }
+    return null;
+  }
+
   function getTypeContainerMarkup() {
     return (
       <div className="pokemon-type-container">
         {
-          types.length !== 0 && types.map((type) => {
-            return <PokemonType type={type} />;
+          types.length !== 0 && types.map((type, index) => {
+            return <PokemonType type={type} key={index} />;
           })
         }
       </div>
@@ -167,21 +189,31 @@ function PokemonDraftCard(
       getMove(moveIDs[2], 3);
       getMove(moveIDs[3], 4);
     }
-  });
+  }, []);
 
   return (
-    <div className={`pokemon-draft-card-container pokemon-draft-card-${color}`}>
-      <div className="pokemon-draft-card-banner">
-        <p className="pokemon-name">{pokemon}</p>
-        {getTypeContainerMarkup()}
-        <div className="pokemon-draft-card-image">
-          {
-            // pokemon && <PokemonSprite pokemonName="blastoise" />
-          }
+    <div>
+      <div className={`pokemon-draft-card-container pokemon-draft-card-${color}`}>
+        <div className="pokemon-draft-card-banner">
+          <p className="pokemon-name">{capitalizeFirstLetter(pokemon)}</p>
+          {getTypeContainerMarkup()}
+          <div className="pokemon-draft-card-image">
+            {pokemon && <PokemonSprite pokemonName={pokemon} />}
+          </div>
         </div>
+        {getMoveContainerMarkup()}
+        {getAbilityContainerMarkup()}
       </div>
-      {getMoveContainerMarkup()}
-      {getAbilityContainerMarkup()}
+      <div className="pokemon-draft-button-container">
+        <Button 
+          text="Select" 
+          onClick={() => {
+            const selectedPokemon = createSelectedPokemon();
+            if (selectedPokemon) {
+              onClick(selectedPokemon);
+            }
+          }} />
+      </div>
     </div>
   );
 }

@@ -31,7 +31,7 @@ function PokemonSprite({ pokemonName }: PokemonSpriteProps) {
 
   useEffect(() => {
     getImage(getPath());
-  });
+  }, []);
 
   return (
     <img

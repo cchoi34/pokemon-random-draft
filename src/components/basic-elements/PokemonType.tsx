@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { PokemonTypes } from '../../utils/dataTypes';
 import '../../styles/pokemon-type.css';
 

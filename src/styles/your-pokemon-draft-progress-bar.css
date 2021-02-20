@@ -2,11 +2,33 @@
   font-size: 1.2rem;
   margin: 1rem 6rem;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .progress-bar {
-  width: 20rem;
-  background-color: blueviolet;
+  min-width: 20rem;
+  min-height: 2rem;
+  background-image: linear-gradient(
+    135deg,
+    var(--bright-cyan),
+    var(--bright-pink)
+  );
   border-radius: 3rem;
-  margin: 0 auto;
+  margin: 0;
+  padding: 0rem 0.6rem;
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+}
+
+.progress-bar li {
+  width: 2rem;
+  margin: 0.2rem;
+}
+
+.progress-bar img {
+  width: 2rem;
+  height: auto;
 }

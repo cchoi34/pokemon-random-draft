@@ -4,6 +4,7 @@
   height: 34rem;
   color: var(--dark-grey);
   font-size: 1.6rem;
+  margin-bottom: 1rem;
 }
 
 .pokemon-draft-card-container p {
@@ -72,6 +73,10 @@
 
 .ability-description {
   font-size: 1rem;
+}
+
+.pokemon-draft-button-container {
+  margin: 1rem 4rem;
 }
 
 .pokemon-draft-card-orange {

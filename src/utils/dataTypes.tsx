@@ -18,7 +18,16 @@ export type PresetBannerData = {
 }
 
 export type YourPokemonDraftProgressBarData = {
-  pokemonDraftedImages: string[],
+  allSelectedPokemon: SelectedPokemonData[],
+}
+
+export type SelectedPokemonData = {
+  pokemonID: number,
+  pokemonName: string,
+  abilityName: string,
+  abilityID: number,
+  moves: string[],
+  moveIDs: number[],
 }
 
 export type PokemonDraftCardData = {
@@ -26,6 +35,7 @@ export type PokemonDraftCardData = {
   moveIDs: number[],
   abilityID: number,
   color: string,
+  onClick: (pokemon: SelectedPokemonData) => void,
 }
 
 export type PokemonMovesType = {
