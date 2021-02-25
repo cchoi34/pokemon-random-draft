@@ -44,7 +44,8 @@
         "no-restricted-globals": "off",
         "react/jsx-boolean-value": "off",
         "arrow-body-style": "off",
-        "react/no-array-index-key": "off"
+        "react/no-array-index-key": "off",
+        "prefer-destructuring": "off"
     },
     "settings": {
         "import/resolver": {

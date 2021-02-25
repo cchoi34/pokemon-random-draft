@@ -3,7 +3,8 @@ import { Redirect } from 'react-router-dom';
 import { db, storage } from '../firebase/firestore';
 import * as userAuthUtils from '../utils/userAuthUtils';
 import * as componentUtils from '../utils/componentUtils';
-import { SelectedPokemonData, PresetBannerData } from '../utils/dataTypes';
+import * as draftUtils from '../utils/draftUtils';
+import { SelectedPokemonData, PresetBannerData, PokemonMovesAndAbilitiesDraftCardData } from '../utils/dataTypes';
 import StartSequenceBanner from './basic-elements/StartSequenceBanner';
 import PokemonDraftCard from './basic-elements/PokemonDraftCard';
 import Button from './basic-elements/Button';
@@ -19,6 +20,7 @@ function StartSequenceSelectAPokemon() {
   const [isUserSignedIn] = useState(userAuthUtils.isUserSignedIn());
   const [redirect, setRedirect] = useState<string | null>(null);
   const [allSelectedPokemon, setAllSelectedPokemon] = useState<SelectedPokemonData[]>([]);
+  const [roundData, setRoundData] = useState<PokemonMovesAndAbilitiesDraftCardData[]>([]);
   const [slotOneID] = useState('slot-1');
   const [imageOneClosed, setImageOneClosed] = useState(true);
   const [pokemonCardOneVisible, setPokemonCardOneVisible] = useState(false);
@@ -52,6 +54,23 @@ function StartSequenceSelectAPokemon() {
     getPokeballPNG();
   }
 
+  function getPresets() {
+    async function getPresetsFromFirebase() {
+      const usersRef = db.collection('users');
+      const userID = userAuthUtils.getUserAuthToken();
+      if (userID) {
+        const doc = await usersRef.doc(userID).get();
+        if (doc.exists) {
+          const data = doc.data();
+          if (data) {
+            setPresets(data.currentDraftPresets);
+          }
+        }
+      }
+    }
+    getPresetsFromFirebase();
+  }
+
   function getCardColor(slotID: string) {
     let color = '';
     switch (slotID) {
@@ -70,25 +89,26 @@ function StartSequenceSelectAPokemon() {
     return color;
   }
   
-  function getPresets() {
-    async function getPresetsFromFirebase() {
-      const usersRef = db.collection('users');
-      const userID = userAuthUtils.getUserAuthToken();
-      if (userID) {
-        const doc = await usersRef.doc(userID).get();
-        if (doc.exists) {
-          const data = doc.data();
-          if (data) {
-            setPresets(data.currentDraftPresets);
-          }
-        }
-      }
-    }
-    getPresetsFromFirebase();
-  }
-
   function validateAllSelectedPokemon(allSelectedPokemon: SelectedPokemonData[]): boolean {
     return allSelectedPokemon.length <= componentUtils.MAX_SELECTED_DRAFT_POKEMON;
+  }
+
+  function getRoundData() {
+    async function getRoundDataFromFirebase() {
+      const usersRef = db.collection('users');
+      const userID = userAuthUtils.getUserAuthToken();
+      if (userID !== null) {
+        const doc = await usersRef.doc(userID).get();
+        const data = doc.data();
+        const currentDraftItems = data?.currentDraftItems;
+        const roundIndex = currentDraftItems.length;
+        const totalDraftItems = data?.totalDraftItems;
+        const roundItems = draftUtils.getRoundDataFromRoundNumber(roundIndex, totalDraftItems);
+        setRoundData(roundItems);
+      }
+    }
+
+    getRoundDataFromFirebase();
   }
 
   function getSelectedPokemonFromFirebase() {
@@ -99,6 +119,9 @@ function StartSequenceSelectAPokemon() {
         const doc = await usersRef.doc(userID).get();
         const currentDraftItems = doc.data()?.currentDraftItems;
         if (validateAllSelectedPokemon(currentDraftItems)) {
+          if (currentDraftItems.length >= componentUtils.MAX_SELECTED_DRAFT_POKEMON) {
+            setRedirect('/start-sequence/your-pokemon');
+          } 
           setAllSelectedPokemon(currentDraftItems);
         } else {
           setAllSelectedPokemon([]);
@@ -116,6 +139,7 @@ function StartSequenceSelectAPokemon() {
         await usersRef.doc(userID).set({
           currentDraftItems: allSelectedPokemon,
         }, { merge: true });
+        location.reload(); 
       }
     }
     if (validateAllSelectedPokemon(allSelectedPokemon)) {
@@ -127,17 +151,31 @@ function StartSequenceSelectAPokemon() {
     const newSelectedPokemon = [...allSelectedPokemon, selectedPokemon];
     if (validateAllSelectedPokemon(newSelectedPokemon)) {
       setAllSelectedPokemon(newSelectedPokemon);
-      setSelectedPokemonToFirebase(newSelectedPokemon);   
+      setSelectedPokemonToFirebase(newSelectedPokemon);  
     }
   }
 
-  function getPokemonCardItem(slotID: string) {
-    const moveIDs = [1, 2, 3, 4];
+  function getPokemonCardItem(slotID: string, index: number) {
+    if (!roundData[index]) {
+      return (
+        <PokemonDraftCard 
+          pokemonID={1} 
+          moveIDs={[1, 2, 3, 4]}
+          abilityID={1}
+          color={getCardColor(slotID)}
+          onClick={onSelectPokemonClick}
+        />
+      );
+    }
+
+    const moveIDs = roundData[index].moveIDs;
+    const pokemonID = roundData[index].pokemonID;
+    const abilityID = roundData[index].abilityID;
     return (
       <PokemonDraftCard 
-        pokemonID={1} 
+        pokemonID={pokemonID} 
         moveIDs={moveIDs}
-        abilityID={1}
+        abilityID={abilityID}
         color={getCardColor(slotID)}
         onClick={onSelectPokemonClick}
       />
@@ -215,17 +253,17 @@ function StartSequenceSelectAPokemon() {
     switch (slotID) {
       case slotOneID:
         if (pokemonCardOneVisible) {
-          return getPokemonCardItem(slotID);
+          return getPokemonCardItem(slotID, 0);
         } 
         return getPokeballItem(slotID);
       case slotTwoID:
         if (pokemonCardTwoVisible) {
-          return getPokemonCardItem(slotID);
+          return getPokemonCardItem(slotID, 1);
         } 
         return getPokeballItem(slotID);
       case slotThreeID:
         if (pokemonCardThreeVisible) {
-          return getPokemonCardItem(slotID);
+          return getPokemonCardItem(slotID, 2);
         } 
         return getPokeballItem(slotID);
       default:
@@ -242,11 +280,8 @@ function StartSequenceSelectAPokemon() {
     getPokeballIcon(slotThreeID, imageThreeClosed);
     getPresets();
     getSelectedPokemonFromFirebase();
+    getRoundData();
   }, [imageOneClosed, imageTwoClosed, imageThreeClosed]);
-
-  if (redirect !== null) {
-    return <Redirect to={redirect} />;
-  }
 
   if (redirect !== null) {
     return <Redirect to={redirect} />;

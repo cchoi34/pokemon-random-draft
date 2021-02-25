@@ -38,6 +38,25 @@ export type PokemonDraftCardData = {
   onClick: (pokemon: SelectedPokemonData) => void,
 }
 
+export type PokemonMovesAndAbilitiesDraftCardData = {
+  pokemonID: number,
+  moveIDs: number[],
+  abilityID: number,
+}
+
+export type DraftIDsByRound = {
+  roundOne: PokemonMovesAndAbilitiesDraftCardData[],
+  roundTwo: PokemonMovesAndAbilitiesDraftCardData[],
+  roundThree: PokemonMovesAndAbilitiesDraftCardData[],
+  roundFour: PokemonMovesAndAbilitiesDraftCardData[],
+  roundFive: PokemonMovesAndAbilitiesDraftCardData[],
+  roundSix: PokemonMovesAndAbilitiesDraftCardData[],
+  roundSeven: PokemonMovesAndAbilitiesDraftCardData[],
+  roundEight: PokemonMovesAndAbilitiesDraftCardData[],
+  roundNine: PokemonMovesAndAbilitiesDraftCardData[],
+  roundTen: PokemonMovesAndAbilitiesDraftCardData[],
+}
+
 export type PokemonMovesType = {
   name: string,
   type: PokemonTypes,

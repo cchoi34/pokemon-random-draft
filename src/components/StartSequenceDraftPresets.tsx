@@ -3,13 +3,10 @@ import { Redirect } from 'react-router-dom';
 import { db, storage } from '../firebase/firestore';
 import * as userAuthUtils from '../utils/userAuthUtils';
 import * as componentUtils from '../utils/componentUtils';
+import * as draftUtils from '../utils/draftUtils';
 import Button from './basic-elements/Button';
 import '../styles/start-sequence.css';
 import '../styles/text.css';
-
-enum PokemonGenerations {
-  GEN_THREE = 'gen-3',
-}
 
 enum DraftPresetCategories {
   GENERATION = 'generation',
@@ -19,7 +16,9 @@ enum DraftPresetCategories {
 }
 
 function StartSequenceDraftPresets() {
-  const [generation, setGeneration] = useState<string>(PokemonGenerations.GEN_THREE);
+  const [generation, setGeneration] = useState<draftUtils.PokemonGenerations>(
+    draftUtils.PokemonGenerations.GEN_3,
+  );
   const [legendaries, setLegendaries] = useState(true);
   const [hinderingAbilities, setHinderingAbilities] = useState(false);
   const [wonderGuard, setWonderGuard] = useState(false);
@@ -31,9 +30,20 @@ function StartSequenceDraftPresets() {
       return value === 'allowed';
     }
 
+    function getGeneration(generation: string) {
+      switch (generation) {
+        case draftUtils.PokemonGenerations.GEN_3:
+          return draftUtils.PokemonGenerations.GEN_3;
+        case draftUtils.PokemonGenerations.GEN_TESTING:
+          return draftUtils.PokemonGenerations.GEN_TESTING;
+        default:
+          return draftUtils.PokemonGenerations.GEN_3;
+      }
+    }
+
     switch (event.target.name) {
       case DraftPresetCategories.GENERATION: 
-        setGeneration(event.target.value);
+        setGeneration(getGeneration(event.target.value));
         break;
       case DraftPresetCategories.LEGENDARIES:
         setLegendaries(getValue(event.target.value));
@@ -62,10 +72,12 @@ function StartSequenceDraftPresets() {
           hinderingAbilities,
           wonderGuard,
         };
+        const totalDraftItems = draftUtils.generateRandomDraftPokemonMoveAndAbilityData(generation);
         userDoc.update({
           currentDraftPresets: draftPresets,
           currentDraftStarted: true,
           currentDraftItems: [],
+          totalDraftItems,
         });
         setRedirect('/start-sequence/select-a-pokemon');
       } else {
@@ -86,7 +98,8 @@ function StartSequenceDraftPresets() {
         <div className="draft-presets-form-element text-eyebrow">
           <label htmlFor="generation">Generation</label>
           <select name="generation" id="generation" onChange={onChange}>
-            <option value={PokemonGenerations.GEN_THREE}>Generation 3</option>
+            <option value={draftUtils.PokemonGenerations.GEN_3}>Generation 3</option>
+            <option value={draftUtils.PokemonGenerations.GEN_TESTING}>Test data</option>
           </select>
         </div>
         <div className="draft-presets-form-element text-eyebrow">
