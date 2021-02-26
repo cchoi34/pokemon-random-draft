@@ -1,0 +1,84 @@
+.pokemon-preview-card-container {
+  font-size: 1rem;
+  background-image: linear-gradient(
+    180deg,
+    var(--rd-lighter-blue),
+    var(--white)
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 17rem;
+  height: 96%;
+  margin: 1.6rem 0.2rem;
+  border-radius: 0.8rem;
+}
+
+.pokemon-preview-card-pokemon-name {
+  font-size: 1.2rem;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+.pokemon-preview-card-moves-title,
+.pokemon-preview-card-ability-title {
+  text-align: center;
+  text-decoration: underline;
+  font-size: 1rem;
+}
+
+.pokemon-preview-card-moves-title {
+  margin-top: 0.2rem;
+}
+
+.pokemon-preview-card-type-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.pokemon-preview-card-ability-container p {
+  margin: 0.4rem 0;
+}
+
+.pokemon-preview-card-ability-container {
+  margin-bottom: 1rem;
+}
+
+.pokemon-preview-card-moves-container {
+  width: 100%;
+}
+
+.pokemon-preview-card-move-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin: 0 0.4rem;
+}
+
+.pokemon-preview-card-move {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.2rem 0.4rem;
+}
+
+.pokemon-preview-card-type-container .pokemon-preview-card-move-type div {
+  margin: 0 0.2rem;
+}
+
+.pokemon-preview-card-move-type div {
+  min-width: 5rem;
+  padding: 0;
+}
+
+.pokemon-preview-card-image {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.6rem;
+}
+
+.pokemon-preview-card-image img {
+  width: 6rem;
+}

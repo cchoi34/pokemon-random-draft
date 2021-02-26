@@ -10,6 +10,11 @@ import {
   PokemonAbilityType,
   SelectedPokemonData, 
 } from '../../utils/dataTypes';
+import { 
+  POKEMON_COLLECTION, 
+  POKEMON_ABILITIES_COLLECTION, 
+  POKEMON_MOVES_COLLECTION,
+} from '../../utils/firestoreUtils';
 import { capitalizeFirstLetter } from '../../utils/componentUtils';
 import '../../styles/pokemon-draft-card.css';
 import '../../styles/text.css';
@@ -34,7 +39,7 @@ function PokemonDraftCard(
 
   function getPokemon() {
     async function getPokemonFromFirestore() {
-      const pokemonRef = db.collection('pokemon-gen-3');
+      const pokemonRef = db.collection(POKEMON_COLLECTION);
       const maybePokemon = await pokemonRef.where('id', '==', pokemonID).get();
       if (!maybePokemon.empty) {
         maybePokemon.forEach((pokemonDoc) => {
@@ -49,7 +54,7 @@ function PokemonDraftCard(
 
   function getMove(moveID: number, moveSlot: number) {
     async function getMovesFromFirestore() {
-      const movesRef = db.collection('pokemon-gen-3-moves');
+      const movesRef = db.collection(POKEMON_MOVES_COLLECTION);
       const maybeMove = await movesRef.where('id', '==', moveID).get();
       if (!maybeMove.empty) {
         maybeMove.forEach((moveDoc) => {
@@ -82,7 +87,7 @@ function PokemonDraftCard(
 
   function getAbility() {
     async function getAbilityFromFirestore() {
-      const abilityRef = db.collection('pokemon-gen-3-abilities');
+      const abilityRef = db.collection(POKEMON_ABILITIES_COLLECTION);
       const maybeAbility = await abilityRef.where('id', '==', abilityID).get();
       if (!maybeAbility.empty) {
         maybeAbility.forEach((abilityDoc) => {
@@ -100,14 +105,16 @@ function PokemonDraftCard(
       return {
         pokemonID,
         pokemonName: pokemon,
+        pokemonTypes: types,
         abilityID,
         abilityName: ability,
+        abilityDescription,
         moveIDs,
         moves: [
-          moveOne?.name,
-          moveTwo?.name,
-          moveThree?.name,
-          moveFour?.name,
+          moveOne, 
+          moveTwo, 
+          moveThree, 
+          moveFour,
         ],
       };
     }

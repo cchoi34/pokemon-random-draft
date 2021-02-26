@@ -24,9 +24,11 @@ export type YourPokemonDraftProgressBarData = {
 export type SelectedPokemonData = {
   pokemonID: number,
   pokemonName: string,
+  pokemonTypes: PokemonTypes[],
   abilityName: string,
+  abilityDescription: string,
   abilityID: number,
-  moves: string[],
+  moves: PokemonMovesType[],
   moveIDs: number[],
 }
 
@@ -36,6 +38,20 @@ export type PokemonDraftCardData = {
   abilityID: number,
   color: string,
   onClick: (pokemon: SelectedPokemonData) => void,
+}
+
+export type PokemonMovesType = {
+  name: string,
+  type: PokemonTypes,
+}
+
+export type PokemonPreviewCardData = {
+  pokemonName: string,
+  pokemonTypes: PokemonTypes[],
+  moves: PokemonMovesType[],
+  abilityName: string,
+  abilityDescription: string,
+  color: string,
 }
 
 export type PokemonMovesAndAbilitiesDraftCardData = {
@@ -55,11 +71,6 @@ export type DraftIDsByRound = {
   roundEight: PokemonMovesAndAbilitiesDraftCardData[],
   roundNine: PokemonMovesAndAbilitiesDraftCardData[],
   roundTen: PokemonMovesAndAbilitiesDraftCardData[],
-}
-
-export type PokemonMovesType = {
-  name: string,
-  type: PokemonTypes,
 }
 
 export type PokemonAbilityType = {

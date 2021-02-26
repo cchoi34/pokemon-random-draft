@@ -3,40 +3,13 @@ import { db } from '../firebase/firestore';
 import * as componentUtils from './componentUtils';
 import { RuleCardData, AllRuleCardData } from './dataTypes';
 
-// export async function getRuleData(): Promise<AllRuleCardData> {
-//   const ruleCardOne = await db.collection('rules').doc('1').get();
-//   const ruleCardTwo = await db.collection('rules').doc('2').get();
-//   const ruleCardThree = await db.collection('rules').doc('3').get();
-//   const ruleCardOneData = ruleCardOne.data();
-//   const ruleCardTwoData = ruleCardTwo.data();
-//   const ruleCardThreeData = ruleCardThree.data();
-//   let dataOne;
-//   let dataTwo;
-//   let dataThree;
-//   if (ruleCardOneData) {
-//     dataOne = componentUtils.modifyDataForHomeState(
-//       ruleCardOneData.title,
-//       ruleCardOneData.description,
-//       ruleCardOneData.color,
-//     );
-//   }
-//   if (ruleCardTwoData) {
-//     dataTwo = componentUtils.modifyDataForHomeState(
-//       ruleCardTwoData.title,
-//       ruleCardTwoData.description,
-//       ruleCardTwoData.color,
-//     );
-//   }
-//   if (ruleCardThreeData) {
-//     dataThree = componentUtils.modifyDataForHomeState(
-//       ruleCardThreeData.title,
-//       ruleCardThreeData.description,
-//       ruleCardThreeData.color,
-//     );
-//   }
-//   return {
-//     dataOne,
-//     dataTwo,
-//     dataThree,
-//   };
-// }
+export const POKEMON_COLLECTION = 'pokemon-gen-3';
+export const POKEMON_ABILITIES_COLLECTION = 'pokemon-gen-3-abilities';
+export const POKEMON_MOVES_COLLECTION = 'pokemon-gen-3-moves';
+export const RULES_COLLECTION = 'rules';
+export const USERS_COLLECTION = 'users';
+
+export const POKEBALLS_STORAGE_PATH = 'pokeballs';
+export const POKEMON_STORAGE_PATH = 'pokemon-gen-3';
+export const POKEBALL_CLOSED_PNG = 'Pokeball Closed.png';
+export const POKEBALL_OPEN_PNG = 'Pokeball Open.png';

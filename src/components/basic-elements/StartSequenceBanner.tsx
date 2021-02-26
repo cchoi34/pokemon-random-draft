@@ -10,7 +10,7 @@ type StartSequenceBannerProps = {
   header: string,
   subheader: string | null,
   presets: PresetBannerData,
-  progressBar: YourPokemonDraftProgressBarData | null,
+  progressBar?: YourPokemonDraftProgressBarData | null,
 }
 
 function StartSequenceBanner({ 

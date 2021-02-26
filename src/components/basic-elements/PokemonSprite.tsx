@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db, storage } from '../../firebase/firestore';
+import { POKEMON_STORAGE_PATH } from '../../utils/firestoreUtils';
 
 type PokemonSpriteProps = {
   pokemonName: string,
@@ -26,7 +27,7 @@ function PokemonSprite({ pokemonName }: PokemonSpriteProps) {
 
   function getPath() {
     const lowerCasePokemon = pokemonName.toLowerCase();
-    return `pokemon-gen-3/${lowerCasePokemon}.png`;
+    return `${POKEMON_STORAGE_PATH}/${lowerCasePokemon}.png`;
   }
 
   useEffect(() => {

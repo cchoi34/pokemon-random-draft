@@ -4,6 +4,7 @@ import { db, storage } from '../firebase/firestore';
 import * as userAuthUtils from '../utils/userAuthUtils';
 import * as componentUtils from '../utils/componentUtils';
 import * as draftUtils from '../utils/draftUtils';
+import { USERS_COLLECTION } from '../utils/firestoreUtils';
 import Button from './basic-elements/Button';
 import '../styles/start-sequence.css';
 import '../styles/text.css';
@@ -64,7 +65,7 @@ function StartSequenceDraftPresets() {
     async function getUserDraftData() {
       if (userToken !== null) {
         setIsUserSignedIn(true);
-        const usersRef = db.collection('users');
+        const usersRef = db.collection(USERS_COLLECTION);
         const userDoc = usersRef.doc(userToken);
         const draftPresets = {
           generation,

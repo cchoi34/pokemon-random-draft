@@ -4,6 +4,12 @@ import { db, storage } from '../firebase/firestore';
 import * as userAuthUtils from '../utils/userAuthUtils';
 import * as componentUtils from '../utils/componentUtils';
 import * as draftUtils from '../utils/draftUtils';
+import { 
+  USERS_COLLECTION, 
+  POKEBALLS_STORAGE_PATH, 
+  POKEBALL_CLOSED_PNG, 
+  POKEBALL_OPEN_PNG,
+} from '../utils/firestoreUtils';
 import { SelectedPokemonData, PresetBannerData, PokemonMovesAndAbilitiesDraftCardData } from '../utils/dataTypes';
 import StartSequenceBanner from './basic-elements/StartSequenceBanner';
 import PokemonDraftCard from './basic-elements/PokemonDraftCard';
@@ -42,10 +48,10 @@ function StartSequenceSelectAPokemon() {
       const storageRef = storage.ref();
       let url = '';
       if (closed) {
-        const pokeballRef = storageRef.child('pokeballs/Pokeball Closed.png');
+        const pokeballRef = storageRef.child(`${POKEBALLS_STORAGE_PATH}/${POKEBALL_CLOSED_PNG}`);
         url = await pokeballRef.getDownloadURL();
       } else {
-        const pokeballRef = storageRef.child('pokeballs/Pokeball Open.png');
+        const pokeballRef = storageRef.child(`${POKEBALLS_STORAGE_PATH}/${POKEBALL_OPEN_PNG}`);
         url = await pokeballRef.getDownloadURL();
       }
       const image = document.getElementById(imageId);
@@ -56,7 +62,7 @@ function StartSequenceSelectAPokemon() {
 
   function getPresets() {
     async function getPresetsFromFirebase() {
-      const usersRef = db.collection('users');
+      const usersRef = db.collection(USERS_COLLECTION);
       const userID = userAuthUtils.getUserAuthToken();
       if (userID) {
         const doc = await usersRef.doc(userID).get();
@@ -95,7 +101,7 @@ function StartSequenceSelectAPokemon() {
 
   function getRoundData() {
     async function getRoundDataFromFirebase() {
-      const usersRef = db.collection('users');
+      const usersRef = db.collection(USERS_COLLECTION);
       const userID = userAuthUtils.getUserAuthToken();
       if (userID !== null) {
         const doc = await usersRef.doc(userID).get();
@@ -114,7 +120,7 @@ function StartSequenceSelectAPokemon() {
   function getSelectedPokemonFromFirebase() {
     async function getSelectedPokemonForUser() {
       const userID = userAuthUtils.getUserAuthToken();
-      const usersRef = db.collection('users');
+      const usersRef = db.collection(USERS_COLLECTION);
       if (userID !== null) {
         const doc = await usersRef.doc(userID).get();
         const currentDraftItems = doc.data()?.currentDraftItems;
@@ -134,7 +140,7 @@ function StartSequenceSelectAPokemon() {
   function setSelectedPokemonToFirebase(allSelectedPokemon: SelectedPokemonData[]) {
     async function setSelectedPokemonForUser() {
       const userID = userAuthUtils.getUserAuthToken();
-      const usersRef = db.collection('users');
+      const usersRef = db.collection(USERS_COLLECTION);
       if (userID !== null) {
         await usersRef.doc(userID).set({
           currentDraftItems: allSelectedPokemon,
