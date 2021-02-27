@@ -32,6 +32,18 @@ export type SelectedPokemonData = {
   moveIDs: number[],
 }
 
+export type YourPokemonDraftItemData = {
+  id: number,
+  pokemonID: number,
+  pokemonName: string,
+  pokemonTypes: PokemonTypes[],
+  abilityName: string,
+  abilityDescription: string,
+  abilityID: number,
+  moves: PokemonMovesType[],
+  moveIDs: number[],
+}
+
 export type PokemonDraftCardData = {
   pokemonID: number,
   moveIDs: number[],

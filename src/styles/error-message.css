@@ -1,0 +1,5 @@
+.error-message {
+  color: var(--rd-orange);
+  font-size: 1rem;
+  transition: all, 0.3s;
+}

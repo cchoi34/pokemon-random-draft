@@ -3,7 +3,7 @@ import { Redirect, Link } from 'react-router-dom';
 import { db } from '../firebase/firestore';
 import * as userAuthUtils from '../utils/userAuthUtils';
 import * as componentUtils from '../utils/componentUtils';
-import { SelectedPokemonData, PresetBannerData } from '../utils/dataTypes';
+import { SelectedPokemonData, PresetBannerData, YourPokemonDraftItemData } from '../utils/dataTypes';
 import StartSequenceBanner from './basic-elements/StartSequenceBanner';
 import PokemonPreviewCard from './basic-elements/PokemonPreviewCard';
 import Button from './basic-elements/Button';
@@ -39,6 +39,46 @@ function YourPokemon() {
     getPresetsFromFirebase();
   }
 
+  function addIDToDraftItems(items: SelectedPokemonData[]): YourPokemonDraftItemData[] {
+    return items.map(({
+      pokemonID, 
+      pokemonName, 
+      pokemonTypes, 
+      abilityName, 
+      abilityID, 
+      abilityDescription, 
+      moves, 
+      moveIDs,
+    }, index) => {
+      return {
+        id: index,
+        pokemonID, 
+        pokemonName, 
+        pokemonTypes, 
+        abilityName, 
+        abilityID, 
+        abilityDescription, 
+        moves, 
+        moveIDs,
+      };
+    });
+  }
+
+  function setYourPokemonDraftItems(items: SelectedPokemonData[]) {
+    async function setItemsToFirebase() {
+      const usersRef = db.collection(USERS_COLLECTION);
+      const userID = userAuthUtils.getUserAuthToken();
+      if (userID) {
+        const userDoc = usersRef.doc(userID);
+        const newItems = addIDToDraftItems(items);
+        userDoc.update({
+          yourPokemonDraftItems: newItems,
+        });
+      }
+    }
+    setItemsToFirebase();
+  }
+
   function getAllSelectedPokemon() {
     async function getAllSelectedPokemonFromFirebase() {
       const usersRef = db.collection(USERS_COLLECTION);
@@ -56,6 +96,7 @@ function YourPokemon() {
           } else if (!draftItems || draftItems.length === 0) {
             setRedirect('/start-sequence');
           } else if (draftItems.length === componentUtils.MAX_SELECTED_DRAFT_POKEMON) {
+            setYourPokemonDraftItems(draftItems);
             setAllSelectedPokemon(draftItems);
           }    
         }
