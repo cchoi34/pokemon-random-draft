@@ -2,6 +2,7 @@ import { RuleCardData } from './dataTypes';
 
 export const POKEBALL_ANIMATION_DELAY = 1200;
 export const MAX_SELECTED_DRAFT_POKEMON = 10;
+export const MAX_CHOSEN_POKEMON = 6;
 
 export function modifyDataForHomeState(
   title: string,

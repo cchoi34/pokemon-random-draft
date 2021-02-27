@@ -4,14 +4,16 @@ import '../../styles/text.css';
 
 type ButtonProps = {
   text: string,
+  disabled?: boolean
   onClick?: () => void,
 }
 
-function Button({ text, onClick }: ButtonProps) {
+function Button({ text, disabled, onClick }: ButtonProps) {
+  const disabledClassName = disabled ? 'button-disabled' : 'button';
   return (
     <button
       type="button"
-      className="button text-nav"
+      className={`text-nav ${disabledClassName}`}
       onClick={onClick}
     >
       {text}

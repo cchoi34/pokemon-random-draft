@@ -15,6 +15,7 @@ import Footer from './components/Footer';
 import StartSequenceDraftPresets from './components/StartSequenceDraftPresets';
 import StartSequenceSelectAPokemon from './components/StartSequenceSelectAPokemon';
 import YourPokemon from './components/YourPokemon';
+import ChooseYourPokemon from './components/ChooseYourPokemon';
 import NotFound404 from './components/NotFound404';
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route exact path="/start-sequence" component={StartSequenceDraftPresets} />
           <Route exact path="/start-sequence/select-a-pokemon" component={StartSequenceSelectAPokemon} />
           <Route exact path="/start-sequence/your-pokemon" component={YourPokemon} />
+          <Route exact path="/start-sequence/choose-your-pokemon" component={ChooseYourPokemon} />
           <Route exact path="/not-found-404" component={NotFound404} />
           <Redirect to="/not-found-404" />
         </Switch>

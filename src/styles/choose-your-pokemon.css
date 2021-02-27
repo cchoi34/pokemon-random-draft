@@ -1,0 +1,57 @@
+.choose-your-pokemon-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.choose-your-pokemon-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 1rem;
+  background-image: linear-gradient(135deg, var(--rd-blue), var(--rd-green));
+  border-radius: 2rem;
+}
+
+.choose-your-pokemon-items button {
+  background-color: transparent;
+  border-style: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0.4rem 0.2rem;
+  border-radius: 0.8rem;
+}
+
+.choose-your-pokemon-items button:hover {
+  transform: translateY(-0.2rem) scale(1.03);
+  transition: all, 0.3s;
+}
+
+.choose-your-pokemon-items button:active {
+  transform: translateY(0rem) scale(1);
+  transition: all, 0.3s;
+}
+
+.choose-your-pokemon-items button:focus {
+  outline: none;
+  box-shadow: 0 0 0.6rem var(--bright-pink);
+}
+
+.choose-your-pokemon-button-container {
+  margin: 2rem auto;
+  display: flex;
+}
+
+.choose-your-pokemon-link-container {
+  margin: 0 1.6rem;
+}
+
+.choose-your-pokemon-chosen-item > div > div {
+  background-image: linear-gradient(180deg, var(--bright-pink), var(--black));
+  color: white;
+}
+
+.choose-your-pokemon-error-message {
+  text-align: center;
+  margin: 0.4rem 0;
+}

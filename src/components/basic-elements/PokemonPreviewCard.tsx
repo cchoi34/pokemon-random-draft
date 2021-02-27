@@ -41,7 +41,7 @@ function PokemonPreviewCard(
           {
             moves.map((move) => {
               return (
-                <div className="pokemon-preview-card-move">
+                <div className="pokemon-preview-card-move" key={move.name}>
                   <p className="pokemon-preview-card-move-name">{capitalizeFirstLetter(move.name)}</p>
                   <div className="pokemon-preview-card-move-type">
                     <PokemonType type={move.type} />
