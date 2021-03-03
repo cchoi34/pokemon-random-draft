@@ -100,6 +100,7 @@ function StartSequenceDraftPresets() {
           <label htmlFor="generation">Generation</label>
           <select name="generation" id="generation" onChange={onChange}>
             <option value={draftUtils.PokemonGenerations.GEN_3}>Generation 3</option>
+            <option value={draftUtils.PokemonGenerations.GEN_4}>Generation 4</option>
             <option value={draftUtils.PokemonGenerations.GEN_TESTING}>Test data</option>
           </select>
         </div>
