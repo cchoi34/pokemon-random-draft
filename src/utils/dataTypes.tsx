@@ -1,3 +1,5 @@
+import { PokemonGenerations } from "./draftUtils"
+
 export type RuleCardData = {
   title: string,
   description: string,
@@ -12,6 +14,13 @@ export type AllRuleCardData = {
 
 export type PresetBannerData = {
   generation: string,
+  legendaries: boolean,
+  hinderingAbilities: boolean,
+  wonderGuard: boolean,
+}
+
+export type DraftPresetsData = {
+  generation: PokemonGenerations,
   legendaries: boolean,
   hinderingAbilities: boolean,
   wonderGuard: boolean,

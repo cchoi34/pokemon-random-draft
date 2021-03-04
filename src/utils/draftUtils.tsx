@@ -1,5 +1,5 @@
 import { MAX_SELECTED_DRAFT_POKEMON } from './componentUtils';
-import { PokemonMovesAndAbilitiesDraftCardData, DraftIDsByRound } from './dataTypes';
+import { PokemonMovesAndAbilitiesDraftCardData, DraftIDsByRound, DraftPresetsData } from './dataTypes';
 
 /* DO NOT CHANGE THESE VALUES! */
 export enum PokemonGenerations {
@@ -48,6 +48,9 @@ export const TESTING_ABILITY_LIMIT = 6;
 export const POKEMON_PER_ROUND = 3;
 export const ABILITIES_PER_POKEMON = 1;
 export const MOVES_PER_POKEMON = 4;
+
+/* Special abilities */
+export const WONDER_GUARD_ID = 25;
 
 function getGenerationLimits(generation: string) {
   switch (generation) {
@@ -114,12 +117,37 @@ function getGenerationLimits(generation: string) {
   }
 }
 
-function generateUniquePokemonOrAbilityIDs(quantity: number, limit: number): number[] {
+function generateUniquePokemonIDs(
+  quantity: number, 
+  limit: number, 
+): number[] {
   const uniqueNumbers: number[] = [];
   while (uniqueNumbers.length < quantity) {
     const randomNumber = Math.ceil(Math.random() * limit);
     if (!uniqueNumbers.includes(randomNumber)) {
       uniqueNumbers.push(randomNumber);
+    }
+  }
+  return uniqueNumbers;
+}
+
+function generateUniqueAbilityIDs(
+  quantity: number, 
+  limit: number, 
+  wonderGuard: boolean,
+): number[] {
+  const uniqueNumbers: number[] = [];
+  while (uniqueNumbers.length < quantity) {
+    const randomNumber = Math.ceil(Math.random() * limit);
+    if (!uniqueNumbers.includes(randomNumber)) {
+      if (wonderGuard) {
+        uniqueNumbers.push(randomNumber);
+      } else {
+        if (randomNumber === WONDER_GUARD_ID) {
+          break;
+        }
+        uniqueNumbers.push(randomNumber);
+      }
     }
   }
   return uniqueNumbers;
@@ -205,17 +233,19 @@ function turnPokemonDataToMap(data: PokemonMovesAndAbilitiesDraftCardData[][]) {
   };
 }
 
-export function generateRandomDraftPokemonMoveAndAbilityData(generation: PokemonGenerations) {
+export function generateRandomDraftPokemonMoveAndAbilityData(draftPresets: DraftPresetsData) {
+  const generation = draftPresets.generation;
   const limitData = getGenerationLimits(generation);
   const randomDraftIDsByRound: PokemonMovesAndAbilitiesDraftCardData[][] = [];
   for (let i = 0; i < MAX_SELECTED_DRAFT_POKEMON; i += 1) {
-    const uniquePokemonIDs = generateUniquePokemonOrAbilityIDs(
+    const uniquePokemonIDs = generateUniquePokemonIDs(
       POKEMON_PER_ROUND, 
       limitData.pokemonLimit,
     );
-    const uniqueAbilityIDs = generateUniquePokemonOrAbilityIDs(
+    const uniqueAbilityIDs = generateUniqueAbilityIDs(
       POKEMON_PER_ROUND * ABILITIES_PER_POKEMON,
       limitData.abilityLimit,
+      draftPresets.wonderGuard,
     );
     const uniqueMoveIDs = generateUniqueMoveIDs(limitData.moveLimit);
     const roundItems = uniquePokemonIDs.map((pokemonID, index) => {

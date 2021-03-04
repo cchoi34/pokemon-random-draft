@@ -35,6 +35,8 @@ function StartSequenceDraftPresets() {
       switch (generation) {
         case draftUtils.PokemonGenerations.GEN_3:
           return draftUtils.PokemonGenerations.GEN_3;
+        case draftUtils.PokemonGenerations.GEN_4:
+          return draftUtils.PokemonGenerations.GEN_4;
         case draftUtils.PokemonGenerations.GEN_TESTING:
           return draftUtils.PokemonGenerations.GEN_TESTING;
         default:
@@ -73,7 +75,8 @@ function StartSequenceDraftPresets() {
           hinderingAbilities,
           wonderGuard,
         };
-        const totalDraftItems = draftUtils.generateRandomDraftPokemonMoveAndAbilityData(generation);
+        const totalDraftItems = draftUtils
+          .generateRandomDraftPokemonMoveAndAbilityData(draftPresets);
         userDoc.update({
           currentDraftPresets: draftPresets,
           currentDraftStarted: true,
