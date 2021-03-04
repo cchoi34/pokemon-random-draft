@@ -7,6 +7,7 @@ import { SelectedPokemonData, PresetBannerData, YourPokemonDraftItemData } from 
 import StartSequenceBanner from './basic-elements/StartSequenceBanner';
 import PokemonPreviewCard from './basic-elements/PokemonPreviewCard';
 import ErrorMessage from './basic-elements/ErrorMessage';
+import ExportModal from './basic-elements/ExportModal';
 import Button from './basic-elements/Button';
 import '../styles/choose-your-pokemon.css';
 import '../styles/text.css';
@@ -21,6 +22,7 @@ function ChooseYourPokemon() {
   ] = useState<YourPokemonDraftItemData[]>([]);
   const [chosenPokemon, setChosenPokemon] = useState<YourPokemonDraftItemData[]>([]);
   const [chosenPokemonIndexes, setChosenPokemonIndexes] = useState<number[]>([]);
+  const [exportItems, setExportItems] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [presets, setPresets] = useState<PresetBannerData>({
     generation: '',
@@ -114,6 +116,15 @@ function ChooseYourPokemon() {
 
   return (
     <div className="choose-your-pokemon-container text-subheader">
+      {
+        exportItems && (
+          <ExportModal 
+            PokemonData={chosenPokemon} 
+            onCloseModal={(() => {
+              setExportItems(false);
+            })} />
+        )
+      }
       <StartSequenceBanner
         header="Choose your 6 Pokemon"
         subheader="Don't worry, you can still pick abilities and moves from a Pokemon not chosen."
@@ -158,9 +169,25 @@ function ChooseYourPokemon() {
           chosenPokemon.length === componentUtils.MAX_CHOSEN_POKEMON 
             ? (
               <div className="choose-your-pokemon-link-container">
-                <Link to="/start-sequence/edit-your-pokemon">
-                  <Button text="Next" />
-                </Link>
+                <Button 
+                  text="Export" 
+                  onClick={(() => {
+                    setExportItems(true);
+                  })} />
+              </div>
+            ) 
+            : (
+              <div className="choose-your-pokemon-link-container choose-your-pokemon-inactive-element">
+                <Button text="Export" disabled={true} />
+              </div>
+            )
+        }
+        {
+          chosenPokemon.length === componentUtils.MAX_CHOSEN_POKEMON 
+          // add link element here once new page is created
+            ? (
+              <div className="choose-your-pokemon-link-container">
+                <Button text="Next" disabled={true} />
               </div>
             ) 
             : (
