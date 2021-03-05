@@ -102,6 +102,32 @@ function ChooseYourPokemon() {
     return 'choose-your-pokemon-preview-card-container';
   }
 
+  function setPokemonToEditToFirebase() {
+    async function setPokemonToEdit() {
+      if (chosenPokemon.length !== componentUtils.MAX_CHOSEN_POKEMON) {
+        return;
+      }
+      const usersRef = db.collection(USERS_COLLECTION);
+      const userID = userAuthUtils.getUserAuthToken();
+      if (userID) {
+        const userDoc = usersRef.doc(userID);
+        userDoc.update({
+          pokemonToEdit: chosenPokemon,
+        });
+        setRedirect('/start-sequence/edit-your-pokemon');
+      } else {
+        setErrorMessage('Make sure you are signed in before progressing!');
+      }
+    }
+    setPokemonToEdit();
+  }
+
+  function onNextClick() {
+    if (chosenPokemon.length === componentUtils.MAX_CHOSEN_POKEMON && isUserSignedIn) {
+      setPokemonToEditToFirebase();
+    }
+  }
+
   useEffect(() => {
     if (!isUserSignedIn) {
       setRedirect('/sign-in');
@@ -184,10 +210,9 @@ function ChooseYourPokemon() {
         }
         {
           chosenPokemon.length === componentUtils.MAX_CHOSEN_POKEMON 
-          // add link element here once new page is created
             ? (
               <div className="choose-your-pokemon-link-container">
-                <Button text="Next" disabled={true} />
+                <Button text="Next" onClick={onNextClick} />
               </div>
             ) 
             : (

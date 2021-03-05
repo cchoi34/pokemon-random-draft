@@ -1,0 +1,34 @@
+.edit-your-pokemon-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 1rem;
+  background-image: linear-gradient(135deg, var(--rd-blue), var(--rd-green));
+  border-radius: 2rem;
+}
+
+.edit-your-pokemon-pokemon-container {
+  background-color: var(--white);
+  border-radius: 1rem;
+  width: 20rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.edit-your-pokemon-pokemon-container > h3 {
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+.edit-your-pokemon-pokemon-button {
+  border-style: none;
+  background-color: transparent;
+  border-radius: 1rem;
+}
+
+.edit-your-pokemon-pokemon-button:hover {
+  transform: translateY(-0.2rem) scale(1.03);
+  border: 0.1rem solid var(--bright-pink);
+  transition: all, 0.3s;
+}

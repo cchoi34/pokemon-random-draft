@@ -3,24 +3,32 @@ import { Redirect, Link } from 'react-router-dom';
 import { db } from '../firebase/firestore';
 import * as userAuthUtils from '../utils/userAuthUtils';
 import * as componentUtils from '../utils/componentUtils';
-import { SelectedPokemonData, PresetBannerData, YourPokemonDraftItemData } from '../utils/dataTypes';
+import { 
+  SelectedPokemonData, 
+  PresetBannerData, 
+  YourPokemonDraftItemData, 
+  SingleAbilityData, 
+  SingleMoveData, 
+  SinglePokemonCardData,
+} from '../utils/dataTypes';
 import StartSequenceBanner from './basic-elements/StartSequenceBanner';
-import PokemonPreviewCard from './basic-elements/PokemonPreviewCard';
+import SinglePokemonCard from './basic-elements/SinglePokemonCard';
 import ErrorMessage from './basic-elements/ErrorMessage';
 import Button from './basic-elements/Button';
-import '../styles/choose-your-pokemon.css';
+import '../styles/edit-your-pokemon.css';
 import '../styles/text.css';
 import { USERS_COLLECTION } from '../utils/firestoreUtils';
 
 function EditYourPokemon() {
   const [isUserSignedIn] = useState(userAuthUtils.isUserSignedIn());
   const [redirect, setRedirect] = useState<string | null>(null);
+  const [allAbilities, setAllAbilities] = useState<SingleAbilityData[]>([]);
+  const [allMoveIDs, setAllMoveIDs] = useState<number[]>([]);
+  const [allPokemonToEdit, setAllPokemonToEdit] = useState<YourPokemonDraftItemData[]>([]);
   const [
-    yourPokemonDraftItems, 
-    setYourPokemonDraftItems,
-  ] = useState<YourPokemonDraftItemData[]>([]);
-  const [chosenPokemon, setChosenPokemon] = useState<YourPokemonDraftItemData[]>([]);
-  const [chosenPokemonIndexes, setChosenPokemonIndexes] = useState<number[]>([]);
+    singleChosenPokemon, 
+    setSingleChosenPokemon,
+  ] = useState<SinglePokemonCardData | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [presets, setPresets] = useState<PresetBannerData>({
     generation: '',
@@ -46,8 +54,28 @@ function EditYourPokemon() {
     getPresetsFromFirebase();
   }
 
-  function getYourPokemonDraftItems() {
-    async function getYourPokemonDraftItemsFromFirebase() {
+  function setDataFromAllDraftItems(draftItems: YourPokemonDraftItemData[]) {
+    const abilities: SingleAbilityData[] = draftItems.map((item) => {
+      return {
+        name: item.abilityName,
+        description: item.abilityDescription,
+      };
+    });
+    const groupedMoves = draftItems.map((item) => {
+      return item.moveIDs;
+    });
+    const moves: number[] = [];
+    groupedMoves.forEach((setOfMoves) => {
+      setOfMoves.forEach((moveID) => {
+        moves.push(moveID);
+      });
+    });
+    setAllAbilities(abilities);
+    setAllMoveIDs(moves);
+  }
+
+  function getAllEditPokemonData() {
+    async function getAllEditPokemonDataFromFirebase() {
       const usersRef = db.collection(USERS_COLLECTION);
       const userID = userAuthUtils.getUserAuthToken();
       if (userID) {
@@ -55,49 +83,42 @@ function EditYourPokemon() {
         if (doc.exists) {
           const data = doc.data();
           const draftItems = data?.yourPokemonDraftItems;
-          if (draftItems) {
-            if (draftItems.length === componentUtils.MAX_SELECTED_DRAFT_POKEMON) {
-              setYourPokemonDraftItems(draftItems);
-            }  
+          const pokemonToEdit = data?.pokemonToEdit;
+          if (draftItems && pokemonToEdit) {
+            setDataFromAllDraftItems(draftItems);
+            setAllPokemonToEdit(pokemonToEdit);
           } else {
             setRedirect('/start-sequence');
           }
         }
       }
     }
-    getYourPokemonDraftItemsFromFirebase();
+    getAllEditPokemonDataFromFirebase();
   }
 
-  function onPreviewCardClick(item: YourPokemonDraftItemData, index: number) {
-    setErrorMessage(null);
-    if (chosenPokemon.includes(item)) {
-      const newChosenPokemon = chosenPokemon.filter((pokemon) => {
-        return pokemon.id !== index;
-      });
-      const newChosenPokemonIndexes = chosenPokemonIndexes.filter((chosenIndex) => {
-        return index !== chosenIndex;
-      });
-      setChosenPokemon(newChosenPokemon);
-      setChosenPokemonIndexes(newChosenPokemonIndexes);
-    } else if (chosenPokemon.length < componentUtils.MAX_CHOSEN_POKEMON) {
-      const newChosenPokemon = [...chosenPokemon, item];
-      const newChosenPokemonIndexes = [...chosenPokemonIndexes, index];
-      setChosenPokemon(newChosenPokemon);
-      setChosenPokemonIndexes(newChosenPokemonIndexes);
-    } else if (chosenPokemon.length >= componentUtils.MAX_CHOSEN_POKEMON) {
-      setErrorMessage('Please make sure to select no more than 6 Pokemon!');
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 3000);
-    }
-  }
-
-  function getPreviewCardClasses(index: number): string {
-    const chosen = chosenPokemonIndexes.includes(index);
-    if (chosen) {
-      return 'choose-your-pokemon-preview-card-container choose-your-pokemon-chosen-item';
-    }
-    return 'choose-your-pokemon-preview-card-container';
+  function getAllPokemonToEditMarkup() {
+    if (allPokemonToEdit.length === componentUtils.MAX_CHOSEN_POKEMON) {
+      return (
+        <div className="edit-your-pokemon-pokemon-container">
+          <h3>Pokemon</h3>
+          {
+            allPokemonToEdit.map((pokemon) => {
+              return (
+                <button 
+                  type="button"
+                  className="edit-your-pokemon-pokemon-button">
+                  <SinglePokemonCard 
+                    pokemonName={pokemon.pokemonName}
+                    pokemonTypes={pokemon.pokemonTypes}
+                  />
+                </button>
+              );
+            })
+          }
+        </div>
+      );
+    } 
+    return <div />;
   }
 
   useEffect(() => {
@@ -105,7 +126,7 @@ function EditYourPokemon() {
       setRedirect('/sign-in');
     }
     getPresets();
-    getYourPokemonDraftItems();
+    getAllEditPokemonData();
   }, []);
 
   if (redirect !== null) {
@@ -113,58 +134,39 @@ function EditYourPokemon() {
   }
 
   return (
-    <div className="choose-your-pokemon-container text-subheader">
+    <div className="edit-your-pokemon-container text-subheader">
       <StartSequenceBanner
         header="Choose a Pokemon to Edit"
         subheader="Select a Pokemon to choose abilities and moves for."
         presets={presets}
       />
-      <div className="choose-your-pokemon-error-message">
+      <div className="edit-your-pokemon-error-message">
         {
           errorMessage && <ErrorMessage message={errorMessage} />
         }
       </div>
-      <div className="choose-your-pokemon-items">
+      <div className="edit-your-pokemon-items">
         {
-          yourPokemonDraftItems && yourPokemonDraftItems.map((item, index) => {
-            return (
-              <button 
-                key={index}
-                type="button" 
-                className={getPreviewCardClasses(index)} 
-                onClick={() => {
-                  onPreviewCardClick(item, index);
-                }}>
-                <PokemonPreviewCard 
-                  pokemonName={item.pokemonName}
-                  pokemonTypes={item.pokemonTypes}
-                  moves={item.moves}
-                  abilityName={item.abilityName}
-                  abilityDescription={item.abilityDescription}
-                  color="blue"
-                />
-              </button>
-            );
-          })
+          getAllPokemonToEditMarkup()
         }
       </div>
-      <div className="choose-your-pokemon-button-container">
-        <div className="choose-your-pokemon-link-container">
-          <Link to="/start-sequence/your-pokemon">
+      <div className="edit-your-pokemon-button-container">
+        <div className="edit-your-pokemon-link-container">
+          <Link to="/start-sequence/choose-your-pokemon">
             <Button text="Back" />
           </Link>
         </div>
         {
-          chosenPokemon.length === componentUtils.MAX_CHOSEN_POKEMON 
+          singleChosenPokemon !== null
             ? (
-              <div className="choose-your-pokemon-link-container">
+              <div className="edit-your-pokemon-link-container">
                 <Link to="/start-sequence/edit-your-pokemon">
                   <Button text="Next" />
                 </Link>
               </div>
             ) 
             : (
-              <div className="choose-your-pokemon-link-container choose-your-pokemon-inactive-element">
+              <div className="edit-your-pokemon-link-container edit-your-pokemon-inactive-element">
                 <Button text="Next" disabled={true} />
               </div>
             )

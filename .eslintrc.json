@@ -45,7 +45,8 @@
         "react/jsx-boolean-value": "off",
         "arrow-body-style": "off",
         "react/no-array-index-key": "off",
-        "prefer-destructuring": "off"
+        "prefer-destructuring": "off",
+        "no-useless-return": "off"
     },
     "settings": {
         "import/resolver": {
