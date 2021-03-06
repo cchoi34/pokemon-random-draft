@@ -52,3 +52,18 @@
   border: 0.1rem solid var(--bright-pink);
   transition: all, 0.3s;
 }
+
+.edit-your-pokemon-selected > div > div {
+  background-image: linear-gradient(180deg, var(--bright-pink), var(--black));
+  color: white;
+}
+
+.edit-your-pokemon-button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.edit-your-pokemon-link-container {
+  width: 15rem;
+  margin: 1rem;
+}

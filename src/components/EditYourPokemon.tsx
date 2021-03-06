@@ -30,7 +30,7 @@ function EditYourPokemon() {
   const [
     singleChosenPokemon, 
     setSingleChosenPokemon,
-  ] = useState<SinglePokemonCardData | null>(null);
+  ] = useState<YourPokemonDraftItemData | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [presets, setPresets] = useState<PresetBannerData>({
     generation: '',
@@ -98,6 +98,28 @@ function EditYourPokemon() {
     getAllEditPokemonDataFromFirebase();
   }
 
+  function onSinglePokemonButtonClick(pokemon: YourPokemonDraftItemData) {
+    setErrorMessage(null);
+    if (singleChosenPokemon) {
+      if (singleChosenPokemon.id === pokemon.id) {
+        setSingleChosenPokemon(null);
+      } else {
+        setSingleChosenPokemon(pokemon);
+      }
+    } else {
+      setSingleChosenPokemon(pokemon);
+    }
+  }
+
+  function getSinglePokemonCardClasses(pokemon: YourPokemonDraftItemData) {
+    if (singleChosenPokemon) {
+      if (pokemon.id === singleChosenPokemon.id) {
+        return 'edit-your-pokemon-pokemon-button edit-your-pokemon-selected';
+      }
+    }
+    return 'edit-your-pokemon-pokemon-button';
+  }
+
   function getAllPokemonToEditMarkup() {
     if (allPokemonToEdit.length === componentUtils.MAX_CHOSEN_POKEMON) {
       return (
@@ -107,7 +129,11 @@ function EditYourPokemon() {
               return (
                 <button 
                   type="button"
-                  className="edit-your-pokemon-pokemon-button">
+                  className={getSinglePokemonCardClasses(pokemon)}
+                  onClick={(() => {
+                    onSinglePokemonButtonClick(pokemon);
+                  })}
+                >
                   <SinglePokemonCard 
                     pokemonName={pokemon.pokemonName}
                     pokemonTypes={pokemon.pokemonTypes}
@@ -159,6 +185,37 @@ function EditYourPokemon() {
     return <div />;
   }
 
+  function setSinglePokemonToEditToFirebase() {
+    async function setSinglePokemonToEdit() {
+      if (!singleChosenPokemon) {
+        return;
+      }
+      const usersRef = db.collection(USERS_COLLECTION);
+      const userID = userAuthUtils.getUserAuthToken();
+      if (userID) {
+        const userDoc = usersRef.doc(userID);
+        const modifiedSingleChosenPokemon = {
+          name: singleChosenPokemon.pokemonName,
+          types: singleChosenPokemon.pokemonTypes,
+          id: singleChosenPokemon.id,
+        };
+        userDoc.update({
+          singlePokemonToEdit: modifiedSingleChosenPokemon,
+        });
+        setRedirect('/start-sequence/edit-single-pokemon');
+      } else {
+        setErrorMessage('Make sure you are signed in before progressing!');
+      }
+    }
+    setSinglePokemonToEdit();
+  }
+
+  function onEditClick() {
+    if (singleChosenPokemon) {
+      setSinglePokemonToEditToFirebase();
+    }
+  }
+
   useEffect(() => {
     if (!isUserSignedIn) {
       setRedirect('/sign-in');
@@ -207,14 +264,12 @@ function EditYourPokemon() {
           singleChosenPokemon !== null
             ? (
               <div className="edit-your-pokemon-link-container">
-                <Link to="/start-sequence/edit-your-pokemon">
-                  <Button text="Next" />
-                </Link>
+                <Button text="Edit" onClick={onEditClick} />
               </div>
             ) 
             : (
               <div className="edit-your-pokemon-link-container edit-your-pokemon-inactive-element">
-                <Button text="Next" disabled={true} />
+                <Button text="Edit" disabled={true} />
               </div>
             )
         }
