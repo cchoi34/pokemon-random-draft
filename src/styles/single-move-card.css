@@ -1,0 +1,19 @@
+.single-move-card-container {
+  font-size: 0.8rem;
+  background-image: linear-gradient(
+    180deg,
+    var(--rd-lighter-blue),
+    var(--black)
+  );
+  color: var(--white);
+  border-radius: 0.4rem;
+  padding: 0.6rem 0.4rem 0.6rem 0.4rem;
+  margin: 0.4rem 0.6rem;
+}
+
+.single-move-card-data {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 10rem;
+}

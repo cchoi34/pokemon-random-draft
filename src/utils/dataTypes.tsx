@@ -1,4 +1,4 @@
-import { PokemonGenerations } from "./draftUtils"
+import { PokemonGenerations } from './draftUtils';
 
 export type RuleCardData = {
   title: string,
@@ -81,6 +81,10 @@ export type SinglePokemonCardData = {
   moves?: SingleMoveData[],
   abilityName?: string,
   abilityDescription?: string,
+}
+
+export type SingleMoveCardProps = {
+  moveID: number,
 }
 
 export type SingleAbilityData = {

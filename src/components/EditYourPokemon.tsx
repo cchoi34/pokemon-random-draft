@@ -13,6 +13,7 @@ import {
 } from '../utils/dataTypes';
 import StartSequenceBanner from './basic-elements/StartSequenceBanner';
 import SinglePokemonCard from './basic-elements/SinglePokemonCard';
+import SingleMoveCard from './basic-elements/SingleMoveCard';
 import ErrorMessage from './basic-elements/ErrorMessage';
 import Button from './basic-elements/Button';
 import '../styles/edit-your-pokemon.css';
@@ -121,6 +122,23 @@ function EditYourPokemon() {
     return <div />;
   }
 
+  function getAllMovesMarkup() {
+    if (allMoveIDs.length > 0) {
+      return (
+        <div className="edit-your-pokemon-moves-container">
+          {
+            allMoveIDs.map((moveID) => {
+              return (
+                <SingleMoveCard moveID={moveID} />
+              );
+            })
+          }
+        </div>
+      );
+    }
+    return <div />;
+  }
+
   useEffect(() => {
     if (!isUserSignedIn) {
       setRedirect('/sign-in');
@@ -146,9 +164,8 @@ function EditYourPokemon() {
         }
       </div>
       <div className="edit-your-pokemon-items">
-        {
-          getAllPokemonToEditMarkup()
-        }
+        { getAllPokemonToEditMarkup() }
+        { getAllMovesMarkup() }
       </div>
       <div className="edit-your-pokemon-button-container">
         <div className="edit-your-pokemon-link-container">

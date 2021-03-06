@@ -16,6 +16,12 @@
   align-items: center;
 }
 
+.edit-your-pokemon-moves-container {
+  display: flex;
+  width: 33%;
+  flex-wrap: wrap;
+}
+
 .edit-your-pokemon-pokemon-container > h3 {
   font-size: 1.6rem;
   text-align: center;
