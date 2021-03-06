@@ -1,4 +1,4 @@
-import { PokemonGenerations } from "./draftUtils"
+import { PokemonGenerations } from './draftUtils';
 
 export type RuleCardData = {
   title: string,
@@ -75,6 +75,31 @@ export type PokemonPreviewCardData = {
   color: string,
 }
 
+export type SinglePokemonCardData = {
+  pokemonName: string,
+  pokemonTypes: PokemonTypes[],
+  moves?: SingleMoveData[],
+  abilityName?: string,
+  abilityDescription?: string,
+}
+
+export type SingleMoveCardProps = {
+  moveID: number,
+}
+
+export type SingleAbilityData = {
+  name: string,
+  description: string,
+}
+
+export type SingleMoveData = {
+  name: string,
+  type: PokemonTypes,
+  power?: string,
+  category?: MovesStatusTypes,
+  accuracy?: string,
+}
+
 export type PokemonMovesAndAbilitiesDraftCardData = {
   pokemonID: number,
   moveIDs: number[],
@@ -118,4 +143,10 @@ export enum PokemonTypes {
   FLYING = 'flying',
   ELECTRIC = 'electric',
   BUG = 'bug',
+}
+
+export enum MovesStatusTypes {
+  PHYSICAL = 'physical',
+  SPECIAL = 'special',
+  STATUS = 'status',
 }
