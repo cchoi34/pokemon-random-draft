@@ -18,6 +18,7 @@ import YourPokemon from './components/YourPokemon';
 import ChooseYourPokemon from './components/ChooseYourPokemon';
 import EditYourPokemon from './components/EditYourPokemon';
 import NotFound404 from './components/NotFound404';
+import EditSinglePokemon from './components/EditSinglePokemon';
 
 function App() {
   const [userToken, setUserToken] = useState(userAuthUtils.getUserAuthToken());
@@ -34,6 +35,7 @@ function App() {
           <Route exact path="/start-sequence/your-pokemon" component={YourPokemon} />
           <Route exact path="/start-sequence/choose-your-pokemon" component={ChooseYourPokemon} />
           <Route exact path="/start-sequence/edit-your-pokemon" component={EditYourPokemon} />
+          <Route exact path="/start-sequence/edit-single-pokemon" component={EditSinglePokemon} />
           <Route exact path="/not-found-404" component={NotFound404} />
           <Redirect to="/not-found-404" />
         </Switch>

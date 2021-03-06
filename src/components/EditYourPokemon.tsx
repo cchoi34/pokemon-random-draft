@@ -10,6 +10,8 @@ import {
   SingleAbilityData, 
   SingleMoveData, 
   SinglePokemonCardData,
+  SingleMoveWithIDData,
+  SingleAbilityWithIDData,
 } from '../utils/dataTypes';
 import StartSequenceBanner from './basic-elements/StartSequenceBanner';
 import SinglePokemonCard from './basic-elements/SinglePokemonCard';
@@ -24,13 +26,13 @@ import { USERS_COLLECTION } from '../utils/firestoreUtils';
 function EditYourPokemon() {
   const [isUserSignedIn] = useState(userAuthUtils.isUserSignedIn());
   const [redirect, setRedirect] = useState<string | null>(null);
-  const [allAbilities, setAllAbilities] = useState<SingleAbilityData[]>([]);
-  const [allMoveIDs, setAllMoveIDs] = useState<number[]>([]);
-  const [allPokemonToEdit, setAllPokemonToEdit] = useState<YourPokemonDraftItemData[]>([]);
+  const [allAbilities, setAllAbilities] = useState<SingleAbilityWithIDData[]>([]);
+  const [allMoves, setAllMoves] = useState<SingleMoveWithIDData[]>([]);
+  const [allPokemonToEdit, setAllPokemonToEdit] = useState<SinglePokemonCardData[]>([]);
   const [
     singleChosenPokemon, 
     setSingleChosenPokemon,
-  ] = useState<YourPokemonDraftItemData | null>(null);
+  ] = useState<SinglePokemonCardData | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [presets, setPresets] = useState<PresetBannerData>({
     generation: '',
@@ -56,26 +58,6 @@ function EditYourPokemon() {
     getPresetsFromFirebase();
   }
 
-  function setDataFromAllDraftItems(draftItems: YourPokemonDraftItemData[]) {
-    const abilities: SingleAbilityData[] = draftItems.map((item) => {
-      return {
-        name: item.abilityName,
-        description: item.abilityDescription,
-      };
-    });
-    const groupedMoves = draftItems.map((item) => {
-      return item.moveIDs;
-    });
-    const moves: number[] = [];
-    groupedMoves.forEach((setOfMoves) => {
-      setOfMoves.forEach((moveID) => {
-        moves.push(moveID);
-      });
-    });
-    setAllAbilities(abilities);
-    setAllMoveIDs(moves);
-  }
-
   function getAllEditPokemonData() {
     async function getAllEditPokemonDataFromFirebase() {
       const usersRef = db.collection(USERS_COLLECTION);
@@ -84,10 +66,12 @@ function EditYourPokemon() {
         const doc = await usersRef.doc(userID).get();
         if (doc.exists) {
           const data = doc.data();
-          const draftItems = data?.yourPokemonDraftItems;
+          const abilitiesToEdit = data?.abilitiesToEdit;
+          const movesToEdit = data?.movesToEdit;
           const pokemonToEdit = data?.pokemonToEdit;
-          if (draftItems && pokemonToEdit) {
-            setDataFromAllDraftItems(draftItems);
+          if (pokemonToEdit && abilitiesToEdit && movesToEdit) {
+            setAllAbilities(abilitiesToEdit);
+            setAllMoves(movesToEdit);
             setAllPokemonToEdit(pokemonToEdit);
           } else {
             setRedirect('/start-sequence');
@@ -98,7 +82,7 @@ function EditYourPokemon() {
     getAllEditPokemonDataFromFirebase();
   }
 
-  function onSinglePokemonButtonClick(pokemon: YourPokemonDraftItemData) {
+  function onSinglePokemonButtonClick(pokemon: SinglePokemonCardData) {
     setErrorMessage(null);
     if (singleChosenPokemon) {
       if (singleChosenPokemon.id === pokemon.id) {
@@ -111,13 +95,27 @@ function EditYourPokemon() {
     }
   }
 
-  function getSinglePokemonCardClasses(pokemon: YourPokemonDraftItemData) {
+  function getSinglePokemonCardClasses(pokemon: SinglePokemonCardData) {
     if (singleChosenPokemon) {
       if (pokemon.id === singleChosenPokemon.id) {
-        return 'edit-your-pokemon-pokemon-button edit-your-pokemon-selected';
+        return 'edit-your-pokemon-pokemon-button edit-your-pokemon-pokemon-selected';
       }
     }
     return 'edit-your-pokemon-pokemon-button';
+  }
+
+  function getSingleAbilityCardClasses(ability: SingleAbilityWithIDData) {
+    if (ability.used) {
+      return 'edit-your-pokemon-ability-button edit-your-pokemon-ability-used';
+    }
+    return 'edit-your-pokemon-ability-button';
+  }
+
+  function getSingleMoveCardClasses(move: SingleMoveWithIDData) {
+    if (move.used) {
+      return 'edit-your-pokemon-move-button edit-your-pokemon-move-used';
+    } 
+    return 'edit-your-pokemon-move-button';
   }
 
   function getAllPokemonToEditMarkup() {
@@ -137,6 +135,10 @@ function EditYourPokemon() {
                   <SinglePokemonCard 
                     pokemonName={pokemon.pokemonName}
                     pokemonTypes={pokemon.pokemonTypes}
+                    id={pokemon.id}
+                    moves={pokemon.moves}
+                    abilityName={pokemon.abilityName}
+                    abilityDescription={pokemon.abilityDescription}
                   />
                 </button>
               );
@@ -149,13 +151,20 @@ function EditYourPokemon() {
   }
 
   function getAllMovesMarkup() {
-    if (allMoveIDs.length > 0) {
+    if (allMoves.length > 0) {
       return (
         <div className="edit-your-pokemon-moves-list">
           {
-            allMoveIDs.map((moveID) => {
+            allMoves.map((move) => {
               return (
-                <SingleMoveCard moveID={moveID} />
+                <div 
+                  className={getSingleMoveCardClasses(move)}
+                  key={move.id}>
+                  <SingleMoveCard 
+                    moveID={move.moveID} 
+                    used={move.used} 
+                  />
+                </div>
               );
             })
           }
@@ -172,10 +181,15 @@ function EditYourPokemon() {
           {
             allAbilities.map((ability) => {
               return (
-                <SingleAbilityCard 
-                  name={ability.name}
-                  description={ability.description} 
-                />
+                <div 
+                  className={getSingleAbilityCardClasses(ability)}
+                  key={ability.id}>
+                  <SingleAbilityCard 
+                    name={ability.name}
+                    description={ability.description} 
+                    used={ability.used}
+                  />
+                </div>
               );
             })
           }
@@ -194,10 +208,14 @@ function EditYourPokemon() {
       const userID = userAuthUtils.getUserAuthToken();
       if (userID) {
         const userDoc = usersRef.doc(userID);
-        const modifiedSingleChosenPokemon = {
-          name: singleChosenPokemon.pokemonName,
-          types: singleChosenPokemon.pokemonTypes,
+
+        const modifiedSingleChosenPokemon: SinglePokemonCardData = {
+          pokemonName: singleChosenPokemon.pokemonName,
+          pokemonTypes: singleChosenPokemon.pokemonTypes,
           id: singleChosenPokemon.id,
+          moves: singleChosenPokemon.moves || [],
+          abilityName: singleChosenPokemon.abilityName || '',
+          abilityDescription: singleChosenPokemon.abilityDescription || '',
         };
         userDoc.update({
           singlePokemonToEdit: modifiedSingleChosenPokemon,

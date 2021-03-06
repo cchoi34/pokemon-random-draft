@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PokemonSprite from './PokemonSprite';
 import PokemonType from './PokemonType';
+import SingleMoveCard from './SingleMoveCard';
 import { SinglePokemonCardData } from '../../utils/dataTypes';
 import { capitalizeFirstLetter } from '../../utils/componentUtils';
 import '../../styles/single-pokemon-card.css';
@@ -13,6 +14,7 @@ function SinglePokemonCard(
     moves,
     abilityName,
     abilityDescription,
+    id,
   }: SinglePokemonCardData,
 ) {
   function getTypeContainerMarkup() {
@@ -32,7 +34,7 @@ function SinglePokemonCard(
   }
 
   function getMoveContainerMarkup() {
-    if (moves) {
+    if (moves && moves.length > 0) {
       return (
         <div className="single-pokemon-card-moves-container">
           <p className="single-pokemon-card-moves-title">Moves</p>
@@ -40,11 +42,11 @@ function SinglePokemonCard(
             {
               moves.map((move) => {
                 return (
-                  <div className="single-pokemon-card-move" key={move.name}>
-                    <p className="single-pokemon-card-move-name">{capitalizeFirstLetter(move.name)}</p>
-                    <div className="single-pokemon-card-move-type">
-                      <PokemonType type={move.type} />
-                    </div>
+                  <div className="single-pokemon-card-move" key={move.id}>
+                    <SingleMoveCard 
+                      moveID={move.moveID}
+                      used={false}
+                    />
                   </div>
                 );
               })

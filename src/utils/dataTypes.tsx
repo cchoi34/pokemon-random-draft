@@ -78,18 +78,34 @@ export type PokemonPreviewCardData = {
 export type SinglePokemonCardData = {
   pokemonName: string,
   pokemonTypes: PokemonTypes[],
-  moves?: SingleMoveData[],
+  moves?: SingleMoveWithIDData[],
   abilityName?: string,
   abilityDescription?: string,
+  id: number,
 }
 
 export type SingleMoveCardProps = {
   moveID: number,
+  used: boolean,
 }
 
 export type SingleAbilityData = {
   name: string,
   description: string,
+  used: boolean,
+}
+
+export type SingleAbilityWithIDData = {
+  name: string,
+  description: string,
+  id: number,
+  used: boolean,
+}
+
+export type SingleMoveWithIDData = {
+  moveID: number,
+  id: number,
+  used: boolean,
 }
 
 export type SingleMoveData = {

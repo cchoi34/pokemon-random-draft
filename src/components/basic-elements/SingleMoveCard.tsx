@@ -7,7 +7,7 @@ import '../../styles/single-move-card.css';
 import { POKEMON_MOVES_COLLECTION } from '../../utils/firestoreUtils';
 
 function SingleMoveCard(
-  { moveID }: SingleMoveCardProps,
+  { moveID, used }: SingleMoveCardProps,
 ) {
   const [moveData, setMoveData] = useState<SingleMoveData | null>(null);
 
