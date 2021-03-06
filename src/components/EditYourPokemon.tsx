@@ -14,6 +14,7 @@ import {
 import StartSequenceBanner from './basic-elements/StartSequenceBanner';
 import SinglePokemonCard from './basic-elements/SinglePokemonCard';
 import SingleMoveCard from './basic-elements/SingleMoveCard';
+import SingleAbilityCard from './basic-elements/SingleAbilityCard';
 import ErrorMessage from './basic-elements/ErrorMessage';
 import Button from './basic-elements/Button';
 import '../styles/edit-your-pokemon.css';
@@ -100,8 +101,7 @@ function EditYourPokemon() {
   function getAllPokemonToEditMarkup() {
     if (allPokemonToEdit.length === componentUtils.MAX_CHOSEN_POKEMON) {
       return (
-        <div className="edit-your-pokemon-pokemon-container">
-          <h3>Pokemon</h3>
+        <div className="edit-your-pokemon-pokemon-list">
           {
             allPokemonToEdit.map((pokemon) => {
               return (
@@ -125,11 +125,31 @@ function EditYourPokemon() {
   function getAllMovesMarkup() {
     if (allMoveIDs.length > 0) {
       return (
-        <div className="edit-your-pokemon-moves-container">
+        <div className="edit-your-pokemon-moves-list">
           {
             allMoveIDs.map((moveID) => {
               return (
                 <SingleMoveCard moveID={moveID} />
+              );
+            })
+          }
+        </div>
+      );
+    }
+    return <div />;
+  }
+
+  function getAllAbilitiesMarkup() {
+    if (allAbilities.length > 0) {
+      return (
+        <div className="edit-your-pokemon-abilities-list">
+          {
+            allAbilities.map((ability) => {
+              return (
+                <SingleAbilityCard 
+                  name={ability.name}
+                  description={ability.description} 
+                />
               );
             })
           }
@@ -164,8 +184,18 @@ function EditYourPokemon() {
         }
       </div>
       <div className="edit-your-pokemon-items">
-        { getAllPokemonToEditMarkup() }
-        { getAllMovesMarkup() }
+        <div className="edit-your-pokemon-abilities-container">
+          <h3>Abilities</h3>
+          { getAllAbilitiesMarkup() }
+        </div>
+        <div className="edit-your-pokemon-pokemon-container">
+          <h3>Pokemon</h3>
+          { getAllPokemonToEditMarkup() }
+        </div>
+        <div className="edit-your-pokemon-moves-container">
+          <h3>Moves</h3>
+          { getAllMovesMarkup() }
+        </div>
       </div>
       <div className="edit-your-pokemon-button-container">
         <div className="edit-your-pokemon-link-container">
