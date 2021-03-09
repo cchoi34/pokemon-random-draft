@@ -61,6 +61,15 @@ function EditSinglePokemon() {
     getPresetsFromFirebase();
   }
 
+  function setChosenMovesAndAbilities(pokemonToEdit: SinglePokemonCardData) {
+    if (pokemonToEdit.moves) {
+      setChosenMoves(pokemonToEdit.moves);
+    }
+    if (pokemonToEdit.ability) {
+      setChosenAbility(pokemonToEdit.ability);
+    }
+  }
+
   function getAllEditPokemonData() {
     async function getAllEditPokemonDataFromFirebase() {
       const usersRef = db.collection(USERS_COLLECTION);
@@ -77,6 +86,7 @@ function EditSinglePokemon() {
             setAllAbilities(abilitiesToEdit);
             setAllMoves(movesToEdit);
             setSinglePokemonToEdit(singlePokemonToEdit);
+            setChosenMovesAndAbilities(singlePokemonToEdit);
             setAllPokemonToEdit(allPokemonToEdit);
           } else {
             setRedirect('/start-sequence');
@@ -152,20 +162,14 @@ function EditSinglePokemon() {
 
   function getSinglePokemonToEditMarkup() {
     if (singlePokemonToEdit) {
-      const hasMoves = singlePokemonToEdit.moves && singlePokemonToEdit.moves?.length > 0;
-      const moves = hasMoves ? singlePokemonToEdit.moves : chosenMoves;
-      const abilityName = singlePokemonToEdit.abilityName || chosenAbility?.name;
-      const abilityDescription = singlePokemonToEdit.abilityDescription 
-        || chosenAbility?.description;
       return (
         <div className="edit-single-pokemon-pokemon-list">
           <SinglePokemonCard 
             pokemonName={singlePokemonToEdit.pokemonName}
             pokemonTypes={singlePokemonToEdit.pokemonTypes}
             id={singlePokemonToEdit.id}
-            moves={moves}
-            abilityName={abilityName}
-            abilityDescription={abilityDescription}
+            moves={chosenMoves}
+            ability={chosenAbility}
           />
         </div>
       );
@@ -320,12 +324,11 @@ function EditSinglePokemon() {
 
   function onSaveClick() {
     if (chosenAbility && chosenMoves.length === MOVES_PER_POKEMON && singlePokemonToEdit) {
-      const pokemonToSave = {
+      const pokemonToSave: SinglePokemonCardData = {
         pokemonName: singlePokemonToEdit.pokemonName,
         pokemonTypes: singlePokemonToEdit.pokemonTypes,
         moves: chosenMoves,
-        abilityName: chosenAbility.name,
-        abilityDescription: chosenAbility.description,
+        ability: chosenAbility,
         id: singlePokemonToEdit.id,
       };
       updatePokemonToEditToFirebase(pokemonToSave);

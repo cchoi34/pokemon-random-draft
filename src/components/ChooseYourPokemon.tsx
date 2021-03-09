@@ -157,6 +157,7 @@ function ChooseYourPokemon() {
         pokemonName: item.pokemonName,
         pokemonTypes: item.pokemonTypes,
         id: item.id,
+        ability: null,
       };
     });
     return modifiedChosenPokemon;
