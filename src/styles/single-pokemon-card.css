@@ -3,7 +3,7 @@
   background-image: linear-gradient(
     180deg,
     var(--rd-lighter-blue),
-    var(--white)
+    var(--rd-lighter-green)
   );
   display: flex;
   flex-direction: column;
@@ -47,7 +47,9 @@
 }
 
 .single-pokemon-card-moves-container {
-  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .single-pokemon-card-move-box {
@@ -62,6 +64,16 @@
   justify-content: space-between;
   align-items: center;
   margin: 0.2rem 0.4rem;
+}
+
+.single-pokemon-card-move > div {
+  width: 14rem;
+}
+
+.single-pokemon-card-move > div > div {
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .single-pokemon-card-type-container .single-pokemon-card-move-type div {

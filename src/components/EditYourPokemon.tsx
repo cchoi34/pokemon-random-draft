@@ -21,7 +21,8 @@ import ErrorMessage from './basic-elements/ErrorMessage';
 import Button from './basic-elements/Button';
 import '../styles/edit-your-pokemon.css';
 import '../styles/text.css';
-import { USERS_COLLECTION } from '../utils/firestoreUtils';
+import { POKEMON_MOVES_COLLECTION, USERS_COLLECTION } from '../utils/firestoreUtils';
+import { MOVES_PER_POKEMON } from '../utils/draftUtils';
 
 function EditYourPokemon() {
   const [isUserSignedIn] = useState(userAuthUtils.isUserSignedIn());
@@ -80,6 +81,26 @@ function EditYourPokemon() {
       }
     }
     getAllEditPokemonDataFromFirebase();
+  }
+
+  function checkAllPokemonToEdit(): boolean {
+    let allPokemonHaveMovesAndAbilities = true;
+    allPokemonToEdit.forEach((item) => {
+      if (item.moves) {
+        if (item.moves.length !== MOVES_PER_POKEMON) {
+          allPokemonHaveMovesAndAbilities = false;
+        }
+      } else {
+        allPokemonHaveMovesAndAbilities = false;
+      }
+      if (!item.abilityName) {
+        allPokemonHaveMovesAndAbilities = false;
+      }
+      if (!item.abilityDescription) {
+        allPokemonHaveMovesAndAbilities = false;
+      }
+    });
+    return allPokemonHaveMovesAndAbilities;
   }
 
   function onSinglePokemonButtonClick(pokemon: SinglePokemonCardData) {
@@ -234,6 +255,12 @@ function EditYourPokemon() {
     }
   }
 
+  function onFinishClick() {
+    if (checkAllPokemonToEdit()) {
+      setRedirect('/start-sequence/final-team');
+    }
+  }
+
   useEffect(() => {
     if (!isUserSignedIn) {
       setRedirect('/sign-in');
@@ -288,6 +315,19 @@ function EditYourPokemon() {
             : (
               <div className="edit-your-pokemon-link-container edit-your-pokemon-inactive-element">
                 <Button text="Edit" disabled={true} />
+              </div>
+            )
+        }
+        {
+          checkAllPokemonToEdit()
+            ? (
+              <div className="edit-your-pokemon-link-container">
+                <Button text="Finish" onClick={onFinishClick} />
+              </div>
+            ) 
+            : (
+              <div className="edit-your-pokemon-link-container edit-your-pokemon-inactive-element">
+                <Button text="Finish" disabled={true} />
               </div>
             )
         }
