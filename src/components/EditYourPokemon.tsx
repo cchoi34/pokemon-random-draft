@@ -60,7 +60,6 @@ function EditYourPokemon() {
   }
 
   function getAllEditPokemonData() {
-    console.log('calling all edit pokemon data');
     async function getAllEditPokemonDataFromFirebase() {
       const usersRef = db.collection(USERS_COLLECTION);
       const userID = userAuthUtils.getUserAuthToken();
