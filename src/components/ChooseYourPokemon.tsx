@@ -11,6 +11,7 @@ import {
   SingleAbilityWithIDData,
   SingleMoveWithIDData,
   SinglePokemonCardData,
+  SingleMoveData,
 } from '../utils/dataTypes';
 import StartSequenceBanner from './basic-elements/StartSequenceBanner';
 import PokemonPreviewCard from './basic-elements/PokemonPreviewCard';
@@ -122,19 +123,27 @@ function ChooseYourPokemon() {
     return abilities;
   }
 
-  function getMovesFromDraftItems(draftItems: YourPokemonDraftItemData[]) {
+  function getMovesFromDraftItems(draftItems: YourPokemonDraftItemData[]): SingleMoveWithIDData[] {
     const groupedMoves = draftItems.map((item) => {
-      return item.moveIDs;
+      return item.moves;
     });
-    const moves: number[] = [];
+    const moves: SingleMoveData[] = [];
     groupedMoves.forEach((setOfMoves) => {
-      setOfMoves.forEach((moveID) => {
-        moves.push(moveID);
+      setOfMoves.forEach((move) => {
+        const newMove = {
+          id: move.id,
+          name: move.name,
+          type: move.type,
+          accuracy: move.accuracy,
+          power: move.power,
+          category: move.category,
+        };
+        moves.push(newMove);
       });
     });
     const movesWithID = moves.map((move, index) => {
       return {
-        moveID: move,
+        move,
         id: index,
         used: false,
       };
@@ -168,7 +177,7 @@ function ChooseYourPokemon() {
         const abilityData = getAbilitiesFromDraftItems(yourPokemonDraftItems);
         const moveData = getMovesFromDraftItems(yourPokemonDraftItems);
         const pokemonData = modifyPokemonFromChosenPokemon(chosenPokemon);
-        userDoc.update({
+        await userDoc.update({
           pokemonToEdit: pokemonData,
           movesToEdit: moveData,
           abilitiesToEdit: abilityData,

@@ -48,7 +48,6 @@ function YourPokemon() {
       abilityID, 
       abilityDescription, 
       moves, 
-      moveIDs,
     }, index) => {
       return {
         id: index,
@@ -59,7 +58,6 @@ function YourPokemon() {
         abilityID, 
         abilityDescription, 
         moves, 
-        moveIDs,
       };
     });
   }

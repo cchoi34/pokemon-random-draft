@@ -9,5 +9,21 @@
 
 .final-team-pokemon-list {
   display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.final-team-pokemon-list > div {
+  margin: 1rem 5%;
+}
+
+.final-team-button-container {
+  margin: 2rem auto;
+  display: flex;
   justify-content: center;
+}
+
+.final-team-link-container {
+  margin: 0 0.8rem;
+  width: 12rem;
 }

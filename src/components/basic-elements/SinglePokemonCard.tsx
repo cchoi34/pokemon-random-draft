@@ -44,8 +44,9 @@ function SinglePokemonCard(
                 return (
                   <div className="single-pokemon-card-move" key={move.id}>
                     <SingleMoveCard 
-                      moveID={move.moveID}
+                      move={move.move}
                       used={false}
+                      id={move.id}
                     />
                   </div>
                 );

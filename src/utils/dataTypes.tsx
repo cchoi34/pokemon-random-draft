@@ -37,8 +37,7 @@ export type SelectedPokemonData = {
   abilityName: string,
   abilityDescription: string,
   abilityID: number,
-  moves: PokemonMovesType[],
-  moveIDs: number[],
+  moves: SingleMoveData[],
 }
 
 export type YourPokemonDraftItemData = {
@@ -49,8 +48,7 @@ export type YourPokemonDraftItemData = {
   abilityName: string,
   abilityDescription: string,
   abilityID: number,
-  moves: PokemonMovesType[],
-  moveIDs: number[],
+  moves: SingleMoveData[],
 }
 
 export type PokemonDraftCardData = {
@@ -61,15 +59,10 @@ export type PokemonDraftCardData = {
   onClick: (pokemon: SelectedPokemonData) => void,
 }
 
-export type PokemonMovesType = {
-  name: string,
-  type: PokemonTypes,
-}
-
 export type PokemonPreviewCardData = {
   pokemonName: string,
   pokemonTypes: PokemonTypes[],
-  moves: PokemonMovesType[],
+  moves: SingleMoveData[],
   abilityName: string,
   abilityDescription: string,
   color: string,
@@ -82,11 +75,6 @@ export type SinglePokemonCardData = {
   abilityName?: string,
   abilityDescription?: string,
   id: number,
-}
-
-export type SingleMoveCardProps = {
-  moveID: number,
-  used: boolean,
 }
 
 export type SingleAbilityData = {
@@ -103,12 +91,13 @@ export type SingleAbilityWithIDData = {
 }
 
 export type SingleMoveWithIDData = {
-  moveID: number,
+  move: SingleMoveData,
   id: number,
   used: boolean,
 }
 
 export type SingleMoveData = {
+  id: number,
   name: string,
   type: PokemonTypes,
   power?: string,

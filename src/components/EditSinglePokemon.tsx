@@ -189,8 +189,9 @@ function EditSinglePokemon() {
                   })}
                 >
                   <SingleMoveCard 
-                    moveID={move.moveID} 
+                    move={move.move} 
                     used={move.used} 
+                    id={move.id}
                   />
                 </button>
               );
@@ -235,7 +236,7 @@ function EditSinglePokemon() {
   function getNewAbilitiesToEdit(
     ability: SingleAbilityWithIDData, 
     abilitiesToEdit: SingleAbilityWithIDData[],
-  ) {
+  ): SingleAbilityWithIDData[] {
     return abilitiesToEdit.map((abilityToEdit) => {
       if (ability.id === abilityToEdit.id) {
         return {
@@ -252,14 +253,14 @@ function EditSinglePokemon() {
   function getNewMovesToEdit(
     moves: SingleMoveWithIDData[], 
     movesToEdit: SingleMoveWithIDData[],
-  ) {
+  ): SingleMoveWithIDData[] {
     const moveIDs = moves.map((move) => {
       return move.id;
     });
     return movesToEdit.map((moveToEdit) => {
       if (moveIDs.includes(moveToEdit.id)) {
         return {
-          moveID: moveToEdit.moveID,
+          move: moveToEdit.move,
           id: moveToEdit.id,
           used: true,
         };
@@ -292,13 +293,13 @@ function EditSinglePokemon() {
         const totalMoves = componentUtils.MAX_SELECTED_DRAFT_POKEMON * MOVES_PER_POKEMON;
         if (allAbilities.length === componentUtils.MAX_SELECTED_DRAFT_POKEMON) {
           const newAbilitiesToEdit = getNewAbilitiesToEdit(chosenAbility, allAbilities);
-          userDoc.update({
+          await userDoc.update({
             abilitiesToEdit: newAbilitiesToEdit,
           });
         }
         if (allMoves.length === totalMoves) {
           const newMovesToEdit = getNewMovesToEdit(chosenMoves, allMoves);
-          userDoc.update({
+          await userDoc.update({
             movesToEdit: newMovesToEdit,
           });
         }
@@ -307,7 +308,7 @@ function EditSinglePokemon() {
             pokemonToSave, 
             allPokemonToEdit,
           );
-          userDoc.update({
+          await userDoc.update({
             pokemonToEdit: newPokemonToEdit,
           });
         }

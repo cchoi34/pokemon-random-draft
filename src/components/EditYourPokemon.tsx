@@ -21,7 +21,7 @@ import ErrorMessage from './basic-elements/ErrorMessage';
 import Button from './basic-elements/Button';
 import '../styles/edit-your-pokemon.css';
 import '../styles/text.css';
-import { POKEMON_MOVES_COLLECTION, USERS_COLLECTION } from '../utils/firestoreUtils';
+import { USERS_COLLECTION } from '../utils/firestoreUtils';
 import { MOVES_PER_POKEMON } from '../utils/draftUtils';
 
 function EditYourPokemon() {
@@ -60,6 +60,7 @@ function EditYourPokemon() {
   }
 
   function getAllEditPokemonData() {
+    console.log('calling all edit pokemon data');
     async function getAllEditPokemonDataFromFirebase() {
       const usersRef = db.collection(USERS_COLLECTION);
       const userID = userAuthUtils.getUserAuthToken();
@@ -140,84 +141,76 @@ function EditYourPokemon() {
   }
 
   function getAllPokemonToEditMarkup() {
-    if (allPokemonToEdit.length === componentUtils.MAX_CHOSEN_POKEMON) {
-      return (
-        <div className="edit-your-pokemon-pokemon-list">
-          {
-            allPokemonToEdit.map((pokemon) => {
-              return (
-                <button 
-                  type="button"
-                  className={getSinglePokemonCardClasses(pokemon)}
-                  onClick={(() => {
-                    onSinglePokemonButtonClick(pokemon);
-                  })}
-                >
-                  <SinglePokemonCard 
-                    pokemonName={pokemon.pokemonName}
-                    pokemonTypes={pokemon.pokemonTypes}
-                    id={pokemon.id}
-                    moves={pokemon.moves}
-                    abilityName={pokemon.abilityName}
-                    abilityDescription={pokemon.abilityDescription}
-                  />
-                </button>
-              );
-            })
-          }
-        </div>
-      );
-    } 
-    return <div />;
+    return (
+      <div className="edit-your-pokemon-pokemon-list">
+        {
+          allPokemonToEdit.map((pokemon) => {
+            return (
+              <button 
+                type="button"
+                className={getSinglePokemonCardClasses(pokemon)}
+                onClick={(() => {
+                  onSinglePokemonButtonClick(pokemon);
+                })}
+              >
+                <SinglePokemonCard 
+                  pokemonName={pokemon.pokemonName}
+                  pokemonTypes={pokemon.pokemonTypes}
+                  id={pokemon.id}
+                  moves={pokemon.moves}
+                  abilityName={pokemon.abilityName}
+                  abilityDescription={pokemon.abilityDescription}
+                />
+              </button>
+            );
+          })
+        }
+      </div>
+    );
   }
 
   function getAllMovesMarkup() {
-    if (allMoves.length > 0) {
-      return (
-        <div className="edit-your-pokemon-moves-list">
-          {
-            allMoves.map((move) => {
-              return (
-                <div 
-                  className={getSingleMoveCardClasses(move)}
-                  key={move.id}>
-                  <SingleMoveCard 
-                    moveID={move.moveID} 
-                    used={move.used} 
-                  />
-                </div>
-              );
-            })
-          }
-        </div>
-      );
-    }
-    return <div />;
+    return (
+      <div className="edit-your-pokemon-moves-list">
+        {
+          allMoves.map((move) => {
+            return (
+              <div 
+                className={getSingleMoveCardClasses(move)}
+                key={move.id}>
+                <SingleMoveCard 
+                  move={move.move} 
+                  used={move.used}
+                  id={move.id} 
+                />
+              </div>
+            );
+          })
+        }
+      </div>
+    );
   }
 
   function getAllAbilitiesMarkup() {
-    if (allAbilities.length > 0) {
-      return (
-        <div className="edit-your-pokemon-abilities-list">
-          {
-            allAbilities.map((ability) => {
-              return (
-                <div 
-                  className={getSingleAbilityCardClasses(ability)}
-                  key={ability.id}>
-                  <SingleAbilityCard 
-                    name={ability.name}
-                    description={ability.description} 
-                    used={ability.used}
-                  />
-                </div>
-              );
-            })
-          }
-        </div>
-      );
-    }
-    return <div />;
+    return (
+      <div className="edit-your-pokemon-abilities-list">
+        {
+          allAbilities.map((ability) => {
+            return (
+              <div 
+                className={getSingleAbilityCardClasses(ability)}
+                key={ability.id}>
+                <SingleAbilityCard 
+                  name={ability.name}
+                  description={ability.description} 
+                  used={ability.used}
+                />
+              </div>
+            );
+          })
+        }
+      </div>
+    );
   }
 
   function setSinglePokemonToEditToFirebase() {
@@ -229,7 +222,6 @@ function EditYourPokemon() {
       const userID = userAuthUtils.getUserAuthToken();
       if (userID) {
         const userDoc = usersRef.doc(userID);
-
         const modifiedSingleChosenPokemon: SinglePokemonCardData = {
           pokemonName: singleChosenPokemon.pokemonName,
           pokemonTypes: singleChosenPokemon.pokemonTypes,
@@ -238,7 +230,7 @@ function EditYourPokemon() {
           abilityName: singleChosenPokemon.abilityName || '',
           abilityDescription: singleChosenPokemon.abilityDescription || '',
         };
-        userDoc.update({
+        await userDoc.update({
           singlePokemonToEdit: modifiedSingleChosenPokemon,
         });
         setRedirect('/start-sequence/edit-single-pokemon');
@@ -249,6 +241,47 @@ function EditYourPokemon() {
     setSinglePokemonToEdit();
   }
 
+  function modifyPokemonToEditToFinalTeam(
+    pokemonToEdit: SinglePokemonCardData[],
+  ): YourPokemonDraftItemData[] {
+    if (pokemonToEdit.length === 0) {
+      return [];
+    }
+    return pokemonToEdit.map((item) => {
+      const moveData = item.moves?.map((move) => {
+        return move.move;
+      });
+      return {
+        id: item.id,
+        pokemonID: item.id,
+        pokemonName: item.pokemonName,
+        pokemonTypes: item.pokemonTypes,
+        abilityName: item.abilityName || '',
+        abilityDescription: item.abilityDescription || '',
+        abilityID: item.id,
+        moves: moveData || [],
+      };
+    });
+  }
+
+  function setFinalTeamToFirebase() {
+    async function setFinalTeam() {
+      const usersRef = db.collection(USERS_COLLECTION);
+      const userID = userAuthUtils.getUserAuthToken();
+      if (userID) {
+        const userDoc = usersRef.doc(userID);
+        const finalTeam = modifyPokemonToEditToFinalTeam(allPokemonToEdit);
+        userDoc.update({
+          finalTeam,
+        });
+        setRedirect('/start-sequence/final-team');
+      } else {
+        setErrorMessage('Make sure you are signed in before progressing!');
+      }
+    }
+    setFinalTeam();
+  }
+
   function onEditClick() {
     if (singleChosenPokemon) {
       setSinglePokemonToEditToFirebase();
@@ -257,7 +290,7 @@ function EditYourPokemon() {
 
   function onFinishClick() {
     if (checkAllPokemonToEdit()) {
-      setRedirect('/start-sequence/final-team');
+      setFinalTeamToFirebase();
     }
   }
 
@@ -288,15 +321,15 @@ function EditYourPokemon() {
       <div className="edit-your-pokemon-items">
         <div className="edit-your-pokemon-abilities-container">
           <h3>Abilities</h3>
-          { getAllAbilitiesMarkup() }
+          { allAbilities.length > 0 && getAllAbilitiesMarkup() }
         </div>
         <div className="edit-your-pokemon-pokemon-container">
           <h3>Pokemon</h3>
-          { getAllPokemonToEditMarkup() }
+          { allPokemonToEdit.length > 0 && getAllPokemonToEditMarkup() }
         </div>
         <div className="edit-your-pokemon-moves-container">
           <h3>Moves</h3>
-          { getAllMovesMarkup() }
+          { allMoves.length > 0 && getAllMovesMarkup() }
         </div>
       </div>
       <div className="edit-your-pokemon-button-container">
