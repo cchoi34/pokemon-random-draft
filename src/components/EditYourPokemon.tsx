@@ -93,10 +93,7 @@ function EditYourPokemon() {
       } else {
         allPokemonHaveMovesAndAbilities = false;
       }
-      if (!item.abilityName) {
-        allPokemonHaveMovesAndAbilities = false;
-      }
-      if (!item.abilityDescription) {
+      if (!item.ability) {
         allPokemonHaveMovesAndAbilities = false;
       }
     });
@@ -157,8 +154,7 @@ function EditYourPokemon() {
                   pokemonTypes={pokemon.pokemonTypes}
                   id={pokemon.id}
                   moves={pokemon.moves}
-                  abilityName={pokemon.abilityName}
-                  abilityDescription={pokemon.abilityDescription}
+                  ability={pokemon.ability}
                 />
               </button>
             );
@@ -212,6 +208,42 @@ function EditYourPokemon() {
     );
   }
 
+  function getNewAbilitiesToEdit(
+    ability: SingleAbilityWithIDData, 
+    abilitiesToEdit: SingleAbilityWithIDData[],
+  ): SingleAbilityWithIDData[] {
+    return abilitiesToEdit.map((abilityToEdit) => {
+      if (ability.id === abilityToEdit.id) {
+        return {
+          name: ability.name,
+          description: ability.description,
+          id: ability.id,
+          used: false,
+        };
+      }
+      return abilityToEdit;
+    });
+  }
+
+  function getNewMovesToEdit(
+    moves: SingleMoveWithIDData[], 
+    movesToEdit: SingleMoveWithIDData[],
+  ): SingleMoveWithIDData[] {
+    const moveIDs = moves.map((move) => {
+      return move.id;
+    });
+    return movesToEdit.map((moveToEdit) => {
+      if (moveIDs.includes(moveToEdit.id)) {
+        return {
+          move: moveToEdit.move,
+          id: moveToEdit.id,
+          used: false,
+        };
+      }
+      return moveToEdit;
+    });
+  }
+
   function setSinglePokemonToEditToFirebase() {
     async function setSinglePokemonToEdit() {
       if (!singleChosenPokemon) {
@@ -226,12 +258,26 @@ function EditYourPokemon() {
           pokemonTypes: singleChosenPokemon.pokemonTypes,
           id: singleChosenPokemon.id,
           moves: singleChosenPokemon.moves || [],
-          abilityName: singleChosenPokemon.abilityName || '',
-          abilityDescription: singleChosenPokemon.abilityDescription || '',
+          ability: singleChosenPokemon.ability || null,
         };
         await userDoc.update({
           singlePokemonToEdit: modifiedSingleChosenPokemon,
         });
+        if (singleChosenPokemon.moves) {
+          const newMovesToEdit = getNewMovesToEdit(singleChosenPokemon.moves, allMoves);
+          await userDoc.update({
+            movesToEdit: newMovesToEdit,
+          });
+        }
+        if (singleChosenPokemon.ability) {
+          const newAbilitiesToEdit = getNewAbilitiesToEdit(
+            singleChosenPokemon.ability, 
+            allAbilities,
+          );
+          await userDoc.update({
+            abilitiesToEdit: newAbilitiesToEdit,
+          });
+        }
         setRedirect('/start-sequence/edit-single-pokemon');
       } else {
         setErrorMessage('Make sure you are signed in before progressing!');
@@ -255,8 +301,8 @@ function EditYourPokemon() {
         pokemonID: item.id,
         pokemonName: item.pokemonName,
         pokemonTypes: item.pokemonTypes,
-        abilityName: item.abilityName || '',
-        abilityDescription: item.abilityDescription || '',
+        abilityName: item.ability?.name || '',
+        abilityDescription: item.ability?.description || '',
         abilityID: item.id,
         moves: moveData || [],
       };

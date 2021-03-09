@@ -12,8 +12,7 @@ function SinglePokemonCard(
     pokemonName,
     pokemonTypes,
     moves,
-    abilityName,
-    abilityDescription,
+    ability,
     id,
   }: SinglePokemonCardData,
 ) {
@@ -60,12 +59,12 @@ function SinglePokemonCard(
   }
 
   function getAbilityContainerMarkup() {
-    if (abilityName && abilityDescription) {
+    if (ability) {
       return (
         <div className="single-pokemon-card-ability-container">
           <p className="single-pokemon-card-ability-title">Ability</p>
-          <p className="single-pokemon-card-ability-name">{capitalizeFirstLetter(abilityName)}</p>
-          <p className="single-pokemon-card-ability-decsription">{abilityDescription}</p>
+          <p className="single-pokemon-card-ability-name">{capitalizeFirstLetter(ability.name)}</p>
+          <p className="single-pokemon-card-ability-decsription">{ability.description}</p>
         </div>
       );
     }

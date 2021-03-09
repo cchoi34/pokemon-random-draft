@@ -72,8 +72,7 @@ export type SinglePokemonCardData = {
   pokemonName: string,
   pokemonTypes: PokemonTypes[],
   moves?: SingleMoveWithIDData[],
-  abilityName?: string,
-  abilityDescription?: string,
+  ability: SingleAbilityWithIDData | null,
   id: number,
 }
 
