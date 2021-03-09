@@ -10,6 +10,8 @@ import {
   SingleAbilityData, 
   SingleMoveData, 
   SinglePokemonCardData,
+  SingleMoveWithIDData,
+  SingleAbilityWithIDData,
 } from '../utils/dataTypes';
 import StartSequenceBanner from './basic-elements/StartSequenceBanner';
 import SinglePokemonCard from './basic-elements/SinglePokemonCard';
@@ -20,13 +22,14 @@ import Button from './basic-elements/Button';
 import '../styles/edit-your-pokemon.css';
 import '../styles/text.css';
 import { USERS_COLLECTION } from '../utils/firestoreUtils';
+import { MOVES_PER_POKEMON } from '../utils/draftUtils';
 
 function EditYourPokemon() {
   const [isUserSignedIn] = useState(userAuthUtils.isUserSignedIn());
   const [redirect, setRedirect] = useState<string | null>(null);
-  const [allAbilities, setAllAbilities] = useState<SingleAbilityData[]>([]);
-  const [allMoveIDs, setAllMoveIDs] = useState<number[]>([]);
-  const [allPokemonToEdit, setAllPokemonToEdit] = useState<YourPokemonDraftItemData[]>([]);
+  const [allAbilities, setAllAbilities] = useState<SingleAbilityWithIDData[]>([]);
+  const [allMoves, setAllMoves] = useState<SingleMoveWithIDData[]>([]);
+  const [allPokemonToEdit, setAllPokemonToEdit] = useState<SinglePokemonCardData[]>([]);
   const [
     singleChosenPokemon, 
     setSingleChosenPokemon,
@@ -56,26 +59,6 @@ function EditYourPokemon() {
     getPresetsFromFirebase();
   }
 
-  function setDataFromAllDraftItems(draftItems: YourPokemonDraftItemData[]) {
-    const abilities: SingleAbilityData[] = draftItems.map((item) => {
-      return {
-        name: item.abilityName,
-        description: item.abilityDescription,
-      };
-    });
-    const groupedMoves = draftItems.map((item) => {
-      return item.moveIDs;
-    });
-    const moves: number[] = [];
-    groupedMoves.forEach((setOfMoves) => {
-      setOfMoves.forEach((moveID) => {
-        moves.push(moveID);
-      });
-    });
-    setAllAbilities(abilities);
-    setAllMoveIDs(moves);
-  }
-
   function getAllEditPokemonData() {
     async function getAllEditPokemonDataFromFirebase() {
       const usersRef = db.collection(USERS_COLLECTION);
@@ -84,10 +67,12 @@ function EditYourPokemon() {
         const doc = await usersRef.doc(userID).get();
         if (doc.exists) {
           const data = doc.data();
-          const draftItems = data?.yourPokemonDraftItems;
+          const abilitiesToEdit = data?.abilitiesToEdit;
+          const movesToEdit = data?.movesToEdit;
           const pokemonToEdit = data?.pokemonToEdit;
-          if (draftItems && pokemonToEdit) {
-            setDataFromAllDraftItems(draftItems);
+          if (pokemonToEdit && abilitiesToEdit && movesToEdit) {
+            setAllAbilities(abilitiesToEdit);
+            setAllMoves(movesToEdit);
             setAllPokemonToEdit(pokemonToEdit);
           } else {
             setRedirect('/start-sequence');
@@ -98,65 +83,214 @@ function EditYourPokemon() {
     getAllEditPokemonDataFromFirebase();
   }
 
-  function getAllPokemonToEditMarkup() {
-    if (allPokemonToEdit.length === componentUtils.MAX_CHOSEN_POKEMON) {
-      return (
-        <div className="edit-your-pokemon-pokemon-list">
-          {
-            allPokemonToEdit.map((pokemon) => {
-              return (
-                <button 
-                  type="button"
-                  className="edit-your-pokemon-pokemon-button">
-                  <SinglePokemonCard 
-                    pokemonName={pokemon.pokemonName}
-                    pokemonTypes={pokemon.pokemonTypes}
-                  />
-                </button>
-              );
-            })
-          }
-        </div>
-      );
+  function checkAllPokemonToEdit(): boolean {
+    let allPokemonHaveMovesAndAbilities = true;
+    allPokemonToEdit.forEach((item) => {
+      if (item.moves) {
+        if (item.moves.length !== MOVES_PER_POKEMON) {
+          allPokemonHaveMovesAndAbilities = false;
+        }
+      } else {
+        allPokemonHaveMovesAndAbilities = false;
+      }
+      if (!item.abilityName) {
+        allPokemonHaveMovesAndAbilities = false;
+      }
+      if (!item.abilityDescription) {
+        allPokemonHaveMovesAndAbilities = false;
+      }
+    });
+    return allPokemonHaveMovesAndAbilities;
+  }
+
+  function onSinglePokemonButtonClick(pokemon: SinglePokemonCardData) {
+    setErrorMessage(null);
+    if (singleChosenPokemon) {
+      if (singleChosenPokemon.id === pokemon.id) {
+        setSingleChosenPokemon(null);
+      } else {
+        setSingleChosenPokemon(pokemon);
+      }
+    } else {
+      setSingleChosenPokemon(pokemon);
+    }
+  }
+
+  function getSinglePokemonCardClasses(pokemon: SinglePokemonCardData) {
+    if (singleChosenPokemon) {
+      if (pokemon.id === singleChosenPokemon.id) {
+        return 'edit-your-pokemon-pokemon-button edit-your-pokemon-pokemon-selected';
+      }
+    }
+    return 'edit-your-pokemon-pokemon-button';
+  }
+
+  function getSingleAbilityCardClasses(ability: SingleAbilityWithIDData) {
+    if (ability.used) {
+      return 'edit-your-pokemon-ability-button edit-your-pokemon-ability-used';
+    }
+    return 'edit-your-pokemon-ability-button';
+  }
+
+  function getSingleMoveCardClasses(move: SingleMoveWithIDData) {
+    if (move.used) {
+      return 'edit-your-pokemon-move-button edit-your-pokemon-move-used';
     } 
-    return <div />;
+    return 'edit-your-pokemon-move-button';
+  }
+
+  function getAllPokemonToEditMarkup() {
+    return (
+      <div className="edit-your-pokemon-pokemon-list">
+        {
+          allPokemonToEdit.map((pokemon) => {
+            return (
+              <button 
+                type="button"
+                className={getSinglePokemonCardClasses(pokemon)}
+                onClick={(() => {
+                  onSinglePokemonButtonClick(pokemon);
+                })}
+              >
+                <SinglePokemonCard 
+                  pokemonName={pokemon.pokemonName}
+                  pokemonTypes={pokemon.pokemonTypes}
+                  id={pokemon.id}
+                  moves={pokemon.moves}
+                  abilityName={pokemon.abilityName}
+                  abilityDescription={pokemon.abilityDescription}
+                />
+              </button>
+            );
+          })
+        }
+      </div>
+    );
   }
 
   function getAllMovesMarkup() {
-    if (allMoveIDs.length > 0) {
-      return (
-        <div className="edit-your-pokemon-moves-list">
-          {
-            allMoveIDs.map((moveID) => {
-              return (
-                <SingleMoveCard moveID={moveID} />
-              );
-            })
-          }
-        </div>
-      );
-    }
-    return <div />;
+    return (
+      <div className="edit-your-pokemon-moves-list">
+        {
+          allMoves.map((move) => {
+            return (
+              <div 
+                className={getSingleMoveCardClasses(move)}
+                key={move.id}>
+                <SingleMoveCard 
+                  move={move.move} 
+                  used={move.used}
+                  id={move.id} 
+                />
+              </div>
+            );
+          })
+        }
+      </div>
+    );
   }
 
   function getAllAbilitiesMarkup() {
-    if (allAbilities.length > 0) {
-      return (
-        <div className="edit-your-pokemon-abilities-list">
-          {
-            allAbilities.map((ability) => {
-              return (
+    return (
+      <div className="edit-your-pokemon-abilities-list">
+        {
+          allAbilities.map((ability) => {
+            return (
+              <div 
+                className={getSingleAbilityCardClasses(ability)}
+                key={ability.id}>
                 <SingleAbilityCard 
                   name={ability.name}
                   description={ability.description} 
+                  used={ability.used}
                 />
-              );
-            })
-          }
-        </div>
-      );
+              </div>
+            );
+          })
+        }
+      </div>
+    );
+  }
+
+  function setSinglePokemonToEditToFirebase() {
+    async function setSinglePokemonToEdit() {
+      if (!singleChosenPokemon) {
+        return;
+      }
+      const usersRef = db.collection(USERS_COLLECTION);
+      const userID = userAuthUtils.getUserAuthToken();
+      if (userID) {
+        const userDoc = usersRef.doc(userID);
+        const modifiedSingleChosenPokemon: SinglePokemonCardData = {
+          pokemonName: singleChosenPokemon.pokemonName,
+          pokemonTypes: singleChosenPokemon.pokemonTypes,
+          id: singleChosenPokemon.id,
+          moves: singleChosenPokemon.moves || [],
+          abilityName: singleChosenPokemon.abilityName || '',
+          abilityDescription: singleChosenPokemon.abilityDescription || '',
+        };
+        await userDoc.update({
+          singlePokemonToEdit: modifiedSingleChosenPokemon,
+        });
+        setRedirect('/start-sequence/edit-single-pokemon');
+      } else {
+        setErrorMessage('Make sure you are signed in before progressing!');
+      }
     }
-    return <div />;
+    setSinglePokemonToEdit();
+  }
+
+  function modifyPokemonToEditToFinalTeam(
+    pokemonToEdit: SinglePokemonCardData[],
+  ): YourPokemonDraftItemData[] {
+    if (pokemonToEdit.length === 0) {
+      return [];
+    }
+    return pokemonToEdit.map((item) => {
+      const moveData = item.moves?.map((move) => {
+        return move.move;
+      });
+      return {
+        id: item.id,
+        pokemonID: item.id,
+        pokemonName: item.pokemonName,
+        pokemonTypes: item.pokemonTypes,
+        abilityName: item.abilityName || '',
+        abilityDescription: item.abilityDescription || '',
+        abilityID: item.id,
+        moves: moveData || [],
+      };
+    });
+  }
+
+  function setFinalTeamToFirebase() {
+    async function setFinalTeam() {
+      const usersRef = db.collection(USERS_COLLECTION);
+      const userID = userAuthUtils.getUserAuthToken();
+      if (userID) {
+        const userDoc = usersRef.doc(userID);
+        const finalTeam = modifyPokemonToEditToFinalTeam(allPokemonToEdit);
+        userDoc.update({
+          finalTeam,
+        });
+        setRedirect('/start-sequence/final-team');
+      } else {
+        setErrorMessage('Make sure you are signed in before progressing!');
+      }
+    }
+    setFinalTeam();
+  }
+
+  function onEditClick() {
+    if (singleChosenPokemon) {
+      setSinglePokemonToEditToFirebase();
+    }
+  }
+
+  function onFinishClick() {
+    if (checkAllPokemonToEdit()) {
+      setFinalTeamToFirebase();
+    }
   }
 
   useEffect(() => {
@@ -186,15 +320,15 @@ function EditYourPokemon() {
       <div className="edit-your-pokemon-items">
         <div className="edit-your-pokemon-abilities-container">
           <h3>Abilities</h3>
-          { getAllAbilitiesMarkup() }
+          { allAbilities.length > 0 && getAllAbilitiesMarkup() }
         </div>
         <div className="edit-your-pokemon-pokemon-container">
           <h3>Pokemon</h3>
-          { getAllPokemonToEditMarkup() }
+          { allPokemonToEdit.length > 0 && getAllPokemonToEditMarkup() }
         </div>
         <div className="edit-your-pokemon-moves-container">
           <h3>Moves</h3>
-          { getAllMovesMarkup() }
+          { allMoves.length > 0 && getAllMovesMarkup() }
         </div>
       </div>
       <div className="edit-your-pokemon-button-container">
@@ -207,14 +341,25 @@ function EditYourPokemon() {
           singleChosenPokemon !== null
             ? (
               <div className="edit-your-pokemon-link-container">
-                <Link to="/start-sequence/edit-your-pokemon">
-                  <Button text="Next" />
-                </Link>
+                <Button text="Edit" onClick={onEditClick} />
               </div>
             ) 
             : (
               <div className="edit-your-pokemon-link-container edit-your-pokemon-inactive-element">
-                <Button text="Next" disabled={true} />
+                <Button text="Edit" disabled={true} />
+              </div>
+            )
+        }
+        {
+          checkAllPokemonToEdit()
+            ? (
+              <div className="edit-your-pokemon-link-container">
+                <Button text="Finish" onClick={onFinishClick} />
+              </div>
+            ) 
+            : (
+              <div className="edit-your-pokemon-link-container edit-your-pokemon-inactive-element">
+                <Button text="Finish" disabled={true} />
               </div>
             )
         }

@@ -5,10 +5,11 @@ import PokemonType from './PokemonType';
 import Button from './Button';
 import { 
   PokemonDraftCardData, 
-  PokemonTypes, 
-  PokemonMovesType, 
+  PokemonTypes,  
   PokemonAbilityType,
-  SelectedPokemonData, 
+  SelectedPokemonData,
+  SingleMoveData,
+  YourPokemonDraftItemData, 
 } from '../../utils/dataTypes';
 import { 
   POKEMON_COLLECTION, 
@@ -30,10 +31,10 @@ function PokemonDraftCard(
 ) {
   const [pokemon, setPokemon] = useState<string>('');
   const [types, setTypes] = useState<PokemonTypes[]>([]);
-  const [moveOne, setMoveOne] = useState<PokemonMovesType>();
-  const [moveTwo, setMoveTwo] = useState<PokemonMovesType>();
-  const [moveThree, setMoveThree] = useState<PokemonMovesType>();
-  const [moveFour, setMoveFour] = useState<PokemonMovesType>();
+  const [moveOne, setMoveOne] = useState<SingleMoveData>();
+  const [moveTwo, setMoveTwo] = useState<SingleMoveData>();
+  const [moveThree, setMoveThree] = useState<SingleMoveData>();
+  const [moveFour, setMoveFour] = useState<SingleMoveData>();
   const [ability, setAbility] = useState<string>('');
   const [abilityDescription, setAbilityDescription] = useState<string>('');
 
@@ -62,6 +63,10 @@ function PokemonDraftCard(
           const moveInfo = {
             name: data.name,
             type: data.type,
+            accuracy: data.accuracy,
+            power: data.power,
+            category: data.category,
+            id: data.id,
           };
           switch (moveSlot) {
             case 1:
@@ -100,7 +105,7 @@ function PokemonDraftCard(
     getAbilityFromFirestore();
   }
 
-  function createSelectedPokemon() {
+  function createSelectedPokemon(): SelectedPokemonData | null {
     if (moveOne && moveTwo && moveThree && moveFour && ability && pokemon) {
       return {
         pokemonID,
@@ -109,7 +114,6 @@ function PokemonDraftCard(
         abilityID,
         abilityName: ability,
         abilityDescription,
-        moveIDs,
         moves: [
           moveOne, 
           moveTwo, 

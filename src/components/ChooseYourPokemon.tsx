@@ -3,7 +3,16 @@ import { Redirect, Link } from 'react-router-dom';
 import { db } from '../firebase/firestore';
 import * as userAuthUtils from '../utils/userAuthUtils';
 import * as componentUtils from '../utils/componentUtils';
-import { SelectedPokemonData, PresetBannerData, YourPokemonDraftItemData } from '../utils/dataTypes';
+import { 
+  SelectedPokemonData, 
+  PresetBannerData, 
+  YourPokemonDraftItemData,
+  SingleAbilityData,
+  SingleAbilityWithIDData,
+  SingleMoveWithIDData,
+  SinglePokemonCardData,
+  SingleMoveData,
+} from '../utils/dataTypes';
 import StartSequenceBanner from './basic-elements/StartSequenceBanner';
 import PokemonPreviewCard from './basic-elements/PokemonPreviewCard';
 import ErrorMessage from './basic-elements/ErrorMessage';
@@ -102,29 +111,88 @@ function ChooseYourPokemon() {
     return 'choose-your-pokemon-preview-card-container';
   }
 
-  function setPokemonToEditToFirebase() {
-    async function setPokemonToEdit() {
+  function getAbilitiesFromDraftItems(draftItems: YourPokemonDraftItemData[]) {
+    const abilities: SingleAbilityWithIDData[] = draftItems.map((item, index) => {
+      return {
+        name: item.abilityName,
+        description: item.abilityDescription,
+        id: index,
+        used: false,
+      };
+    });
+    return abilities;
+  }
+
+  function getMovesFromDraftItems(draftItems: YourPokemonDraftItemData[]): SingleMoveWithIDData[] {
+    const groupedMoves = draftItems.map((item) => {
+      return item.moves;
+    });
+    const moves: SingleMoveData[] = [];
+    groupedMoves.forEach((setOfMoves) => {
+      setOfMoves.forEach((move) => {
+        const newMove = {
+          id: move.id,
+          name: move.name,
+          type: move.type,
+          accuracy: move.accuracy,
+          power: move.power,
+          category: move.category,
+        };
+        moves.push(newMove);
+      });
+    });
+    const movesWithID = moves.map((move, index) => {
+      return {
+        move,
+        id: index,
+        used: false,
+      };
+    });
+    return movesWithID;
+  }
+
+  function modifyPokemonFromChosenPokemon(chosenPokemon: YourPokemonDraftItemData[]) {
+    const modifiedChosenPokemon: SinglePokemonCardData[] = chosenPokemon.map((item) => {
+      return {
+        pokemonName: item.pokemonName,
+        pokemonTypes: item.pokemonTypes,
+        id: item.id,
+      };
+    });
+    return modifiedChosenPokemon;
+  }
+
+  function setPokemonMovesAndAbilitiesToEditToFirebase() {
+    async function setDataToEdit() {
       if (chosenPokemon.length !== componentUtils.MAX_CHOSEN_POKEMON) {
+        return;
+      }
+      if (!yourPokemonDraftItems) {
         return;
       }
       const usersRef = db.collection(USERS_COLLECTION);
       const userID = userAuthUtils.getUserAuthToken();
       if (userID) {
         const userDoc = usersRef.doc(userID);
-        userDoc.update({
-          pokemonToEdit: chosenPokemon,
+        const abilityData = getAbilitiesFromDraftItems(yourPokemonDraftItems);
+        const moveData = getMovesFromDraftItems(yourPokemonDraftItems);
+        const pokemonData = modifyPokemonFromChosenPokemon(chosenPokemon);
+        await userDoc.update({
+          pokemonToEdit: pokemonData,
+          movesToEdit: moveData,
+          abilitiesToEdit: abilityData,
         });
         setRedirect('/start-sequence/edit-your-pokemon');
       } else {
         setErrorMessage('Make sure you are signed in before progressing!');
       }
     }
-    setPokemonToEdit();
+    setDataToEdit();
   }
 
   function onNextClick() {
     if (chosenPokemon.length === componentUtils.MAX_CHOSEN_POKEMON && isUserSignedIn) {
-      setPokemonToEditToFirebase();
+      setPokemonMovesAndAbilitiesToEditToFirebase();
     }
   }
 
