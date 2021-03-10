@@ -53,7 +53,7 @@ function SignIn() {
         </div>
         <div className="sign-in-form-elements text-eyebrow">
           <label htmlFor="password">Password</label>
-          <input type="text" name="password" id="password" onChange={onChange} />
+          <input type="password" name="password" id="password" onChange={onChange} />
         </div>
         <div className="sign-in-button">
           {

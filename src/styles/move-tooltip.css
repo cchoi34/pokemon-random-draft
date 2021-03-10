@@ -1,0 +1,19 @@
+.move-tooltip-container {
+  background-image: linear-gradient(135deg, var(--dark-grey), var(--ghost));
+  color: white;
+  border-radius: 1rem;
+  font-size: 1rem;
+  padding: 0.6rem 0.8rem;
+  position: absolute;
+  width: auto;
+  top: -6rem;
+  left: 1rem;
+  transition: 0.3s all;
+  display: flex;
+  flex-direction: column;
+}
+
+.move-tooltip-container p {
+  margin: 0.1rem 0;
+  white-space: nowrap;
+}
