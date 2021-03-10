@@ -102,11 +102,11 @@ function CreateAccount() {
             !isPasswordLengthValid && generateFormErrorMessage('password must be longer than 5 characters')
           }
           <label htmlFor="password">Choose a password</label>
-          <input type="text" name="password" id="password" onChange={onChange} />
+          <input type="password" name="password" id="password" onChange={onChange} />
         </div>
         <div className="create-account-form-elements text-eyebrow">
           <label htmlFor="password">Confirm password</label>
-          <input type="text" name="confirm-password" id="confirm-password" onChange={onChange} />
+          <input type="password" name="confirm-password" id="confirm-password" onChange={onChange} />
         </div>
         <div className="create-account-button">
           <Button text="Create account" onClick={onCreateAccountClick} /> 
